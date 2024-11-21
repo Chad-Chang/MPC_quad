@@ -1,0 +1,3 @@
+/home/chad/Documents/c++/casadi_practice/build/CMakeFiles/rebuild_cache.dir
+/home/chad/Documents/c++/casadi_practice/build/CMakeFiles/edit_cache.dir
+/home/chad/Documents/c++/casadi_practice/build/CMakeFiles/main.dir

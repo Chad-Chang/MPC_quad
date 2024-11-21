@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/chad/Documents/c++/casadi_practice/main.cpp
+casadi/casadi.hpp
+-
+Eigen/Dense
+-
+vector
+-
+iostream
+-
+

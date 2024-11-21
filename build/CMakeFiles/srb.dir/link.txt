@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/srb.dir/SRB.cpp.o  -o srb   -L/usr/local/lib 
