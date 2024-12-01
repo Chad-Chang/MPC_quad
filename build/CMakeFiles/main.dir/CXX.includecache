@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/chad/Documents/c++/qpOASES/main.cpp
+qpOASES.hpp
+-
+iostream
+-
+chrono
+-
+Eigen/Dense
+-
+vector
+-
+
