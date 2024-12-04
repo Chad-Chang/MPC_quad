@@ -33,14 +33,13 @@ private:
 
     VectorXd x0_; //initial state
     VectorXd x_ref_; // reference state
-    std::vector<Matrix3d> r_i_; // skew symmetric form 
     VectorXd gravity_; // gravity vector
-    std::vector<Vector3d> trunk2foot_; // FL,FR, RL, RR
-    
+
 public:
     Optimizer(StateModel_* FL, StateModel_* FR, StateModel_* RL, StateModel_* RR, TrunkModel_* Base);
     ~Optimizer();
-    
+    StateModel_* FL_ptr_; StateModel_* FR_ptr_; StateModel_* RL_ptr_; StateModel_* RR_ptr_;
+    TrunkModel_* Trunk_ptr_;
     
 };
 #endif
