@@ -1,7 +1,7 @@
 #ifndef DATALOGGING_H_
 #define DATALOGGING_H_
 
-#include "globVariable.h"
+#include "globalVariable.h"
 
 /***************** Data Logging *****************/
 FILE* fid;

@@ -131,19 +131,16 @@ void kinematics::model_param_cal(const mjModel* m, mjData* d, StateModel_* state
     // diagonal inertia는 DOB의 nominal inertia
 }; // param_model parameter
 
-void kinematics::sensor_measure(const mjModel* m, mjData* d, StateModel_* state_model, int leg_no)
+//
+void kinematics::sensor_measure(const mjModel* m, mjData* d, StateModel_* state_model,TrunkModel_* TrunkModel,int leg_no)
 {
     cut_off_cal = 1/(2*pi*100);
-    /*** (Serial) Joint position ***/
-    /*** (Serial) Joint position ***/
-    // state_model->q[0] = d->sensordata[leg_no + 6];
-    // state_model->q[1] = d->sensordata[leg_no + 7]; // (relative) HFE angle
-    // state_model->q[2] = d->sensordata[leg_no + 8] + d->sensordata[leg_no + 8]; // (relative) KFE angle
+
     state_model->q[0] = d->qpos[leg_no + 7];
     state_model->q[1] = d->qpos[leg_no + 8]; // (relative) HFE angle
     state_model->q[2] = d->qpos[leg_no + 9]; // (relative) KFE angle
     
-     state_model->qdot[0] = d->qvel[leg_no + 6]; // 속도는 이게 맞음.
+    state_model->qdot[0] = d->qvel[leg_no + 6]; // 속도는 이게 맞음.
     state_model->qdot[1] = d->qvel[leg_no + 7];
     state_model->qdot[2] = d->qvel[leg_no + 8];
 
@@ -151,45 +148,49 @@ void kinematics::sensor_measure(const mjModel* m, mjData* d, StateModel_* state_
     state_model->q_bi[0] = d->qpos[leg_no + 8];                             // (absolute) HFE angle
     state_model->q_bi[1] = d->qpos[leg_no + 8] + d->qpos[leg_no + 9]; // (absolute) KFE angle
 
+    //* cartesian pos and vel  w.r.t ineritial frame
+    state_model -> posCS[0] = d->sensordata[leg_no+44];
+    state_model -> posCS[1] = d->sensordata[leg_no+45];
+    state_model -> posCS[2] = d->sensordata[leg_no+46];
+
+    TrunkModel->velCS[0] = d->sensordata[34];
+    TrunkModel->velCS[1] = d->sensordata[35];
+    TrunkModel->velCS[2] = d->sensordata[36];
+
+    TrunkModel->posCS[0] = d->sensordata[37];
+    TrunkModel->posCS[1] = d->sensordata[38];
+    TrunkModel->posCS[2] = d->sensordata[39];
 
     if(leg_no == 0)
-        state_model -> foot_z = d->sensordata[46];
+    {
+        TrunkModel->pos_base2FL = state_model->posCS - TrunkModel->posCS;
+        TrunkModel->skew_base2FL << 0, -TrunkModel->pos_base2FL[2], TrunkModel->pos_base2FL[1],
+                                    TrunkModel->pos_base2FL[2], 0, -TrunkModel->pos_base2FL[0],
+                                    -TrunkModel->pos_base2FL[1], TrunkModel->pos_base2FL[0], 0;
+    }
     else if(leg_no == 3)
-        state_model -> foot_z = d->sensordata[49];
+    {
+        TrunkModel->pos_base2FR = state_model->posCS - TrunkModel->posCS;
+        TrunkModel->skew_base2FR << 0, -TrunkModel->pos_base2FR[2], TrunkModel->pos_base2FR[1],
+                                    TrunkModel->pos_base2FR[2], 0, -TrunkModel->pos_base2FR[0],
+                                    -TrunkModel->pos_base2FR[1], TrunkModel->pos_base2FR[0], 0;            
+    }
+        
     else if(leg_no == 6)
-        state_model -> foot_z = d->sensordata[52];
+    {
+        TrunkModel->pos_base2RL = state_model->posCS - TrunkModel->posCS;
+        TrunkModel->skew_base2RL << 0, -TrunkModel->pos_base2RL[2], TrunkModel->pos_base2RL[1],
+                                    TrunkModel->pos_base2RL[2], 0, -TrunkModel->pos_base2RL[0],
+                                    -TrunkModel->pos_base2RL[1], TrunkModel->pos_base2RL[0], 0;            
+    }
     else if(leg_no == 9)
-        state_model -> foot_z = d->sensordata[55];
-   
-  
-        if(d->time > 0.3)
-        {
-            if(state_model -> foot_z <0.02 && state_model -> touched ==false) 
-            // if(state_model -> touched ==false&& d->sensordata[26]>100) 
-            {
-                state_model -> touched = true;   
-                state_model -> time_td = d->time;
-                // cout << "leg_no = " << leg_no << " touch down" <<endl;
-            }
-            else if(state_model -> foot_z >0.022 && state_model -> touched ==true )
-            // else if(state_model -> touched ==true && d->sensordata[26]<100)
-            {
-                state_model -> touched = false; 
-                state_model -> time_to = d->time;
-                // cout << "leg_no = " << leg_no << " lift off" <<endl;
-            }
-        }
-        if(state_model -> time_to- state_model->time_td > 0 )
-        {
-            state_model->time_stance  = state_model -> time_to- state_model->time_td;
-            // cout <<"leg_nu = "<< leg_no<<" time = " <<state_model->time_stance <<endl;
-        }
-
-    // state_model->q_bi[0] = d->sensordata[6];                    // (absolute) HFE angle
-    // state_model->q_bi[1] = d->sensordata[6] + d->sensordata[7]; // (absolute) KFE angle
-
-    // printf("q1 : %f, q2 : %f \n", d->qpos[0], d->qpos[1]);
-    // printf("qm : %f, qb : %f \n\n", q_bi[0], q_bi[1]);
+    {
+        TrunkModel->pos_base2RR = state_model->posCS - TrunkModel->posCS;
+        TrunkModel->skew_base2RR << 0, -TrunkModel->pos_base2RR[2], TrunkModel->pos_base2RR[1],
+                                    TrunkModel->pos_base2RR[2], 0, -TrunkModel->pos_base2RR[0],
+                                    -TrunkModel->pos_base2RR[1], TrunkModel->pos_base2RR[0], 0;            
+    }
+    //*
 
 // angular velocity data_ real data
     state_model->qdot_bi[0] = d->qvel[leg_no + 7];
@@ -208,12 +209,6 @@ void kinematics::sensor_measure(const mjModel* m, mjData* d, StateModel_* state_
             tustin_derivative(state_model->qdot_bi_tustin[i], state_model->qdot_bi_tustin_old[i],
                 state_model->qddot_bi_tustin_old[i], cut_off_cal);
     }
-    // printf("qdot_bi[0]: %f, qdot_bi[1]: %f \n qdot_bi_tust[0]: %f, qdot_bi_tust[1]: %f \n\n",
-    // state_Model_FL.qdot_bi[0],
-    //        state_Model_FL.qdot_bi[1], state_Model_FL.qdot_bi_tustin[0], state_Model_FL.qdot_bi_tustin[1]);
-    // printf("qddot_bi[0]: %f, qddot_bi[1]: %f \n qddot_bi_tust[0]: %f, qddot_bi_tust[1]: %f \n\n",
-    //        state_Model_FL.qddot_bi[0], state_Model_FL.qddot_bi[1], state_Model_FL.qddot_bi_tustin[0],
-    //        state_Model_FL.qddot_bi_tustin[1]);
 };
 
 void kinematics::jacobianRW(StateModel_* state_model)

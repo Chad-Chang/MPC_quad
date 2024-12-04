@@ -6,5 +6,5 @@ CXX_FLAGS =  -pthread   -std=gnu++17
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/chad/Documents/mujoco-3.1.6/myproject/raibert_walking/includes -I/home/chad/Documents/mujoco-3.1.6/myproject/raibert_walking/../../include -I/home/chad/Documents/mujoco-3.1.6/myproject/raibert_walking/../../include/mujoco 
+CXX_INCLUDES = -I/home/chad/Documents/mujoco-3.1.6/myproject/MIT_SRB/includes -I/home/chad/Documents/mujoco-3.1.6/myproject/MIT_SRB/includes/logging -I/home/chad/Documents/mujoco-3.1.6/myproject/MIT_SRB/includes/optimization -I/home/chad/Documents/mujoco-3.1.6/myproject/MIT_SRB/includes/mcl_controller -I/home/chad/Documents/mujoco-3.1.6/myproject/MIT_SRB/includes/ui -I/home/chad/Documents/mujoco-3.1.6/myproject/MIT_SRB/../../include -I/home/chad/Documents/mujoco-3.1.6/myproject/MIT_SRB/../../include/mujoco 
 

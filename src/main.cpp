@@ -23,12 +23,13 @@
 #include <new>
 #include <string>
 #include <thread>
+#include <qpOASES.hpp>
 
 #include <mujoco/mujoco.h>
 #include "glfw_adapter.h"
 #include "simulate.h"
 #include "array_safety.h"
-#include "globVariable.h"
+#include "globalVariable.h"
 #include "trajectory.h"
 #include "controller.h"
 #include "kinematics.h"
@@ -268,6 +269,7 @@ StateModel_ state_Model_FL;
 StateModel_ state_Model_FR;
 StateModel_ state_Model_RL;
 StateModel_ state_Model_RR;
+TrunkModel_ TrunkModel;
 
 const int leg_FL_no = 0;
 const int leg_FR_no = 3;
@@ -410,7 +412,7 @@ void mycontroller(const mjModel* m,mjData *d){
     }
 
   /* Trajectory Generation */
-    int cmd_motion_type = 1;
+    int cmd_motion_type = 2;
     int mode_admitt = 1;
     vx_est = d->sensordata[34];
     
@@ -430,20 +432,32 @@ void mycontroller(const mjModel* m,mjData *d){
         tra_RL.Walking(T_walking, d->time, &state_Model_RL, vx, vx_est, leg_RL_no);
         tra_RR.Walking(T_walking, d->time, &state_Model_RR, vx, vx_est, leg_RR_no);
       }
-      else
-      {  
-          tra_FL.Hold(&state_Model_FL);  // Hold stance
-          tra_FR.Hold(&state_Model_FR);
-          tra_RL.Hold(&state_Model_RL);
-          tra_RR.Hold(&state_Model_RR);
-      }
+      
+    }
+    else
+    {  
+      tra_FL.Hold(&state_Model_FL);  // Hold stance
+      tra_FR.Hold(&state_Model_FR);
+      tra_RL.Hold(&state_Model_RL);
+      tra_RR.Hold(&state_Model_RR);
     }
 
 
-    kin_FL.sensor_measure(m, d, &state_Model_FL, leg_FL_no); // get joint sensor data & calculate biarticular angles
-    kin_FR.sensor_measure(m, d, &state_Model_FR, leg_FR_no);
-    kin_RL.sensor_measure(m, d, &state_Model_RL, leg_RL_no);
-    kin_RR.sensor_measure(m, d, &state_Model_RR, leg_RR_no);
+    kin_FL.sensor_measure(m, d, &state_Model_FL, &TrunkModel, leg_FL_no); // get joint sensor data & calculate biarticular angles
+    kin_FR.sensor_measure(m, d, &state_Model_FR, &TrunkModel, leg_FR_no);
+    kin_RL.sensor_measure(m, d, &state_Model_RL, &TrunkModel, leg_RL_no);
+    kin_RR.sensor_measure(m, d, &state_Model_RR, &TrunkModel, leg_RR_no);
+    cout <<"pose = "<<  TrunkModel.posCS<<endl;
+    cout <<"base -> FL "<<  TrunkModel.pos_base2FL<<endl;
+    cout <<"base -> FR "<<  TrunkModel.pos_base2FR<<endl;
+    cout <<"base -> RL "<<  TrunkModel.pos_base2RL<<endl;
+    cout <<"base -> RR "<<  TrunkModel.pos_base2RR<<endl;
+
+    cout << "skew -> FL "<< TrunkModel.skew_base2FL <<endl;
+    cout << "skew -> FR "<< TrunkModel.skew_base2FR <<endl;
+    cout << "skew -> RL "<< TrunkModel.skew_base2RL <<endl;
+    cout << "skew -> RR "<< TrunkModel.skew_base2RR <<endl;
+    
 
     kin_FL.model_param_cal(m, d,&state_Model_FL); // calculate model parameters
     kin_FR.model_param_cal(m, d,&state_Model_FR);

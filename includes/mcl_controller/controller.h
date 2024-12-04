@@ -1,7 +1,7 @@
 #ifndef __CONTROLLER_H__
 #define __CONTROLLER_H__
 
-#include "globVariable.h"
+#include "globalVariable.h"
 #include "kinematics.h"
 #include "trajectory.h"
 #include <mujoco/mujoco.h> //Caution Crash

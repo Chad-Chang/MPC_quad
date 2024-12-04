@@ -35,7 +35,7 @@
 #include <mujoco/mujoco.h>
 #include "platform_ui_adapter.h"
 #include "array_safety.h"
-#include "globVariable.h"
+#include "globalVariable.h"
 
 // When launched via an App Bundle on macOS, the working directory is the path to the App Bundle's
 // resource directory. This causes files to be saved into the bundle, which is not the desired

@@ -1,4 +1,4 @@
-# Install script for directory: /home/chad/Documents/mujoco-3.1.6/myproject/raibert_walking
+# Install script for directory: /home/chad/Documents/mujoco-3.1.6/myproject/MIT_SRB
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/chad/Documents/mujoco-3.1.6/myproject/raibert_walking/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/chad/Documents/mujoco-3.1.6/myproject/MIT_SRB/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

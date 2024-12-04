@@ -1,7 +1,7 @@
 #ifndef __TRAJECTORY_H__
 #define	__TRAJECTORY_H__
 
-#include "globVariable.h"
+#include "globalVariable.h"
 #include <iostream>
 using namespace std;
 class trajectory

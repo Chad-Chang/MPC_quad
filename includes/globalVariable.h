@@ -78,6 +78,25 @@ extern double error_vel_trunk_old[NDOF_TRUNK];
 
 extern double ctrl_input_RW_from_trunk[NUM_LEG];
 
+struct TrunkModel_
+{
+  Vector3d posCS; // cartesian coordinate w.r.t world coordinate
+  Vector3d posCS_des;
+  Vector3d velCS_des;
+  Vector3d velCS;
+  
+  Vector3d pos_base2FL;// cartesian coordinate w.r.t world coordinate
+  Vector3d pos_base2FR;
+  Vector3d pos_base2RL;
+  Vector3d pos_base2RR;
+
+  Matrix3d skew_base2FL; // scew symmetric 
+  Matrix3d skew_base2FR;
+  Matrix3d skew_base2RL;
+  Matrix3d skew_base2RR;
+
+};
+
 struct StateModel_
 {   
     //state_model에 새로 생성되는 얘들 초기화 및 update 확인하기
@@ -110,6 +129,10 @@ struct StateModel_
     Vector2d gravity_bi_torq;
     Matrix2d off_diag_inertia_bi;
     
+    Vector3d posCS; //* cartesian coodiante
+    Vector3d posCS_old;
+    Vector3d posCS_ref;
+    Vector3d posCS_des;
 
     /* Rotating Workspace Coordinates */
     double r0;              // initial leg length

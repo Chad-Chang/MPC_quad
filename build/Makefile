@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/chad/Documents/mujoco-3.1.6/myproject/raibert_walking
+CMAKE_SOURCE_DIR = /home/chad/Documents/mujoco-3.1.6/myproject/MIT_SRB
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/chad/Documents/mujoco-3.1.6/myproject/raibert_walking/build
+CMAKE_BINARY_DIR = /home/chad/Documents/mujoco-3.1.6/myproject/MIT_SRB/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/chad/Documents/mujoco-3.1.6/myproject/raibert_walking/build/CMakeFiles /home/chad/Documents/mujoco-3.1.6/myproject/raibert_walking/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/chad/Documents/mujoco-3.1.6/myproject/MIT_SRB/build/CMakeFiles /home/chad/Documents/mujoco-3.1.6/myproject/MIT_SRB/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/chad/Documents/mujoco-3.1.6/myproject/raibert_walking/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/chad/Documents/mujoco-3.1.6/myproject/MIT_SRB/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -123,167 +123,59 @@ main/fast:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
 
-src/controller.o: src/controller.cpp.o
+src/logging/BaseDataSaver.o: src/logging/BaseDataSaver.cpp.o
 
-.PHONY : src/controller.o
-
-# target to build an object file
-src/controller.cpp.o:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/controller.cpp.o
-.PHONY : src/controller.cpp.o
-
-src/controller.i: src/controller.cpp.i
-
-.PHONY : src/controller.i
-
-# target to preprocess a source file
-src/controller.cpp.i:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/controller.cpp.i
-.PHONY : src/controller.cpp.i
-
-src/controller.s: src/controller.cpp.s
-
-.PHONY : src/controller.s
-
-# target to generate assembly for a file
-src/controller.cpp.s:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/controller.cpp.s
-.PHONY : src/controller.cpp.s
-
-src/filter.o: src/filter.cpp.o
-
-.PHONY : src/filter.o
+.PHONY : src/logging/BaseDataSaver.o
 
 # target to build an object file
-src/filter.cpp.o:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/filter.cpp.o
-.PHONY : src/filter.cpp.o
+src/logging/BaseDataSaver.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/logging/BaseDataSaver.cpp.o
+.PHONY : src/logging/BaseDataSaver.cpp.o
 
-src/filter.i: src/filter.cpp.i
+src/logging/BaseDataSaver.i: src/logging/BaseDataSaver.cpp.i
 
-.PHONY : src/filter.i
+.PHONY : src/logging/BaseDataSaver.i
 
 # target to preprocess a source file
-src/filter.cpp.i:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/filter.cpp.i
-.PHONY : src/filter.cpp.i
+src/logging/BaseDataSaver.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/logging/BaseDataSaver.cpp.i
+.PHONY : src/logging/BaseDataSaver.cpp.i
 
-src/filter.s: src/filter.cpp.s
+src/logging/BaseDataSaver.s: src/logging/BaseDataSaver.cpp.s
 
-.PHONY : src/filter.s
+.PHONY : src/logging/BaseDataSaver.s
 
 # target to generate assembly for a file
-src/filter.cpp.s:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/filter.cpp.s
-.PHONY : src/filter.cpp.s
+src/logging/BaseDataSaver.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/logging/BaseDataSaver.cpp.s
+.PHONY : src/logging/BaseDataSaver.cpp.s
 
-src/glfw_adapter.o: src/glfw_adapter.cpp.o
+src/logging/ExtendedDataSaver.o: src/logging/ExtendedDataSaver.cpp.o
 
-.PHONY : src/glfw_adapter.o
+.PHONY : src/logging/ExtendedDataSaver.o
 
 # target to build an object file
-src/glfw_adapter.cpp.o:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/glfw_adapter.cpp.o
-.PHONY : src/glfw_adapter.cpp.o
+src/logging/ExtendedDataSaver.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/logging/ExtendedDataSaver.cpp.o
+.PHONY : src/logging/ExtendedDataSaver.cpp.o
 
-src/glfw_adapter.i: src/glfw_adapter.cpp.i
+src/logging/ExtendedDataSaver.i: src/logging/ExtendedDataSaver.cpp.i
 
-.PHONY : src/glfw_adapter.i
-
-# target to preprocess a source file
-src/glfw_adapter.cpp.i:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/glfw_adapter.cpp.i
-.PHONY : src/glfw_adapter.cpp.i
-
-src/glfw_adapter.s: src/glfw_adapter.cpp.s
-
-.PHONY : src/glfw_adapter.s
-
-# target to generate assembly for a file
-src/glfw_adapter.cpp.s:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/glfw_adapter.cpp.s
-.PHONY : src/glfw_adapter.cpp.s
-
-src/glfw_dispatch.o: src/glfw_dispatch.cpp.o
-
-.PHONY : src/glfw_dispatch.o
-
-# target to build an object file
-src/glfw_dispatch.cpp.o:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/glfw_dispatch.cpp.o
-.PHONY : src/glfw_dispatch.cpp.o
-
-src/glfw_dispatch.i: src/glfw_dispatch.cpp.i
-
-.PHONY : src/glfw_dispatch.i
+.PHONY : src/logging/ExtendedDataSaver.i
 
 # target to preprocess a source file
-src/glfw_dispatch.cpp.i:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/glfw_dispatch.cpp.i
-.PHONY : src/glfw_dispatch.cpp.i
+src/logging/ExtendedDataSaver.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/logging/ExtendedDataSaver.cpp.i
+.PHONY : src/logging/ExtendedDataSaver.cpp.i
 
-src/glfw_dispatch.s: src/glfw_dispatch.cpp.s
+src/logging/ExtendedDataSaver.s: src/logging/ExtendedDataSaver.cpp.s
 
-.PHONY : src/glfw_dispatch.s
-
-# target to generate assembly for a file
-src/glfw_dispatch.cpp.s:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/glfw_dispatch.cpp.s
-.PHONY : src/glfw_dispatch.cpp.s
-
-src/kinematics.o: src/kinematics.cpp.o
-
-.PHONY : src/kinematics.o
-
-# target to build an object file
-src/kinematics.cpp.o:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/kinematics.cpp.o
-.PHONY : src/kinematics.cpp.o
-
-src/kinematics.i: src/kinematics.cpp.i
-
-.PHONY : src/kinematics.i
-
-# target to preprocess a source file
-src/kinematics.cpp.i:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/kinematics.cpp.i
-.PHONY : src/kinematics.cpp.i
-
-src/kinematics.s: src/kinematics.cpp.s
-
-.PHONY : src/kinematics.s
+.PHONY : src/logging/ExtendedDataSaver.s
 
 # target to generate assembly for a file
-src/kinematics.cpp.s:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/kinematics.cpp.s
-.PHONY : src/kinematics.cpp.s
-
-src/lodepng.o: src/lodepng.cpp.o
-
-.PHONY : src/lodepng.o
-
-# target to build an object file
-src/lodepng.cpp.o:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/lodepng.cpp.o
-.PHONY : src/lodepng.cpp.o
-
-src/lodepng.i: src/lodepng.cpp.i
-
-.PHONY : src/lodepng.i
-
-# target to preprocess a source file
-src/lodepng.cpp.i:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/lodepng.cpp.i
-.PHONY : src/lodepng.cpp.i
-
-src/lodepng.s: src/lodepng.cpp.s
-
-.PHONY : src/lodepng.s
-
-# target to generate assembly for a file
-src/lodepng.cpp.s:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/lodepng.cpp.s
-.PHONY : src/lodepng.cpp.s
+src/logging/ExtendedDataSaver.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/logging/ExtendedDataSaver.cpp.s
+.PHONY : src/logging/ExtendedDataSaver.cpp.s
 
 src/main.o: src/main.cpp.o
 
@@ -312,86 +204,275 @@ src/main.cpp.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
-src/platform_ui_adapter.o: src/platform_ui_adapter.cpp.o
+src/mcl_controller/controller.o: src/mcl_controller/controller.cpp.o
 
-.PHONY : src/platform_ui_adapter.o
-
-# target to build an object file
-src/platform_ui_adapter.cpp.o:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/platform_ui_adapter.cpp.o
-.PHONY : src/platform_ui_adapter.cpp.o
-
-src/platform_ui_adapter.i: src/platform_ui_adapter.cpp.i
-
-.PHONY : src/platform_ui_adapter.i
-
-# target to preprocess a source file
-src/platform_ui_adapter.cpp.i:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/platform_ui_adapter.cpp.i
-.PHONY : src/platform_ui_adapter.cpp.i
-
-src/platform_ui_adapter.s: src/platform_ui_adapter.cpp.s
-
-.PHONY : src/platform_ui_adapter.s
-
-# target to generate assembly for a file
-src/platform_ui_adapter.cpp.s:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/platform_ui_adapter.cpp.s
-.PHONY : src/platform_ui_adapter.cpp.s
-
-src/simulate.o: src/simulate.cpp.o
-
-.PHONY : src/simulate.o
+.PHONY : src/mcl_controller/controller.o
 
 # target to build an object file
-src/simulate.cpp.o:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/simulate.cpp.o
-.PHONY : src/simulate.cpp.o
+src/mcl_controller/controller.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/mcl_controller/controller.cpp.o
+.PHONY : src/mcl_controller/controller.cpp.o
 
-src/simulate.i: src/simulate.cpp.i
+src/mcl_controller/controller.i: src/mcl_controller/controller.cpp.i
 
-.PHONY : src/simulate.i
+.PHONY : src/mcl_controller/controller.i
 
 # target to preprocess a source file
-src/simulate.cpp.i:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/simulate.cpp.i
-.PHONY : src/simulate.cpp.i
+src/mcl_controller/controller.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/mcl_controller/controller.cpp.i
+.PHONY : src/mcl_controller/controller.cpp.i
 
-src/simulate.s: src/simulate.cpp.s
+src/mcl_controller/controller.s: src/mcl_controller/controller.cpp.s
 
-.PHONY : src/simulate.s
+.PHONY : src/mcl_controller/controller.s
 
 # target to generate assembly for a file
-src/simulate.cpp.s:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/simulate.cpp.s
-.PHONY : src/simulate.cpp.s
+src/mcl_controller/controller.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/mcl_controller/controller.cpp.s
+.PHONY : src/mcl_controller/controller.cpp.s
 
-src/trajectory.o: src/trajectory.cpp.o
+src/mcl_controller/filter.o: src/mcl_controller/filter.cpp.o
 
-.PHONY : src/trajectory.o
+.PHONY : src/mcl_controller/filter.o
 
 # target to build an object file
-src/trajectory.cpp.o:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/trajectory.cpp.o
-.PHONY : src/trajectory.cpp.o
+src/mcl_controller/filter.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/mcl_controller/filter.cpp.o
+.PHONY : src/mcl_controller/filter.cpp.o
 
-src/trajectory.i: src/trajectory.cpp.i
+src/mcl_controller/filter.i: src/mcl_controller/filter.cpp.i
 
-.PHONY : src/trajectory.i
+.PHONY : src/mcl_controller/filter.i
 
 # target to preprocess a source file
-src/trajectory.cpp.i:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/trajectory.cpp.i
-.PHONY : src/trajectory.cpp.i
+src/mcl_controller/filter.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/mcl_controller/filter.cpp.i
+.PHONY : src/mcl_controller/filter.cpp.i
 
-src/trajectory.s: src/trajectory.cpp.s
+src/mcl_controller/filter.s: src/mcl_controller/filter.cpp.s
 
-.PHONY : src/trajectory.s
+.PHONY : src/mcl_controller/filter.s
 
 # target to generate assembly for a file
-src/trajectory.cpp.s:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/trajectory.cpp.s
-.PHONY : src/trajectory.cpp.s
+src/mcl_controller/filter.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/mcl_controller/filter.cpp.s
+.PHONY : src/mcl_controller/filter.cpp.s
+
+src/mcl_controller/kinematics.o: src/mcl_controller/kinematics.cpp.o
+
+.PHONY : src/mcl_controller/kinematics.o
+
+# target to build an object file
+src/mcl_controller/kinematics.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/mcl_controller/kinematics.cpp.o
+.PHONY : src/mcl_controller/kinematics.cpp.o
+
+src/mcl_controller/kinematics.i: src/mcl_controller/kinematics.cpp.i
+
+.PHONY : src/mcl_controller/kinematics.i
+
+# target to preprocess a source file
+src/mcl_controller/kinematics.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/mcl_controller/kinematics.cpp.i
+.PHONY : src/mcl_controller/kinematics.cpp.i
+
+src/mcl_controller/kinematics.s: src/mcl_controller/kinematics.cpp.s
+
+.PHONY : src/mcl_controller/kinematics.s
+
+# target to generate assembly for a file
+src/mcl_controller/kinematics.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/mcl_controller/kinematics.cpp.s
+.PHONY : src/mcl_controller/kinematics.cpp.s
+
+src/mcl_controller/trajectory.o: src/mcl_controller/trajectory.cpp.o
+
+.PHONY : src/mcl_controller/trajectory.o
+
+# target to build an object file
+src/mcl_controller/trajectory.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/mcl_controller/trajectory.cpp.o
+.PHONY : src/mcl_controller/trajectory.cpp.o
+
+src/mcl_controller/trajectory.i: src/mcl_controller/trajectory.cpp.i
+
+.PHONY : src/mcl_controller/trajectory.i
+
+# target to preprocess a source file
+src/mcl_controller/trajectory.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/mcl_controller/trajectory.cpp.i
+.PHONY : src/mcl_controller/trajectory.cpp.i
+
+src/mcl_controller/trajectory.s: src/mcl_controller/trajectory.cpp.s
+
+.PHONY : src/mcl_controller/trajectory.s
+
+# target to generate assembly for a file
+src/mcl_controller/trajectory.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/mcl_controller/trajectory.cpp.s
+.PHONY : src/mcl_controller/trajectory.cpp.s
+
+src/optimization/optimizer.o: src/optimization/optimizer.cpp.o
+
+.PHONY : src/optimization/optimizer.o
+
+# target to build an object file
+src/optimization/optimizer.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/optimization/optimizer.cpp.o
+.PHONY : src/optimization/optimizer.cpp.o
+
+src/optimization/optimizer.i: src/optimization/optimizer.cpp.i
+
+.PHONY : src/optimization/optimizer.i
+
+# target to preprocess a source file
+src/optimization/optimizer.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/optimization/optimizer.cpp.i
+.PHONY : src/optimization/optimizer.cpp.i
+
+src/optimization/optimizer.s: src/optimization/optimizer.cpp.s
+
+.PHONY : src/optimization/optimizer.s
+
+# target to generate assembly for a file
+src/optimization/optimizer.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/optimization/optimizer.cpp.s
+.PHONY : src/optimization/optimizer.cpp.s
+
+src/ui/glfw_adapter.o: src/ui/glfw_adapter.cpp.o
+
+.PHONY : src/ui/glfw_adapter.o
+
+# target to build an object file
+src/ui/glfw_adapter.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ui/glfw_adapter.cpp.o
+.PHONY : src/ui/glfw_adapter.cpp.o
+
+src/ui/glfw_adapter.i: src/ui/glfw_adapter.cpp.i
+
+.PHONY : src/ui/glfw_adapter.i
+
+# target to preprocess a source file
+src/ui/glfw_adapter.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ui/glfw_adapter.cpp.i
+.PHONY : src/ui/glfw_adapter.cpp.i
+
+src/ui/glfw_adapter.s: src/ui/glfw_adapter.cpp.s
+
+.PHONY : src/ui/glfw_adapter.s
+
+# target to generate assembly for a file
+src/ui/glfw_adapter.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ui/glfw_adapter.cpp.s
+.PHONY : src/ui/glfw_adapter.cpp.s
+
+src/ui/glfw_dispatch.o: src/ui/glfw_dispatch.cpp.o
+
+.PHONY : src/ui/glfw_dispatch.o
+
+# target to build an object file
+src/ui/glfw_dispatch.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ui/glfw_dispatch.cpp.o
+.PHONY : src/ui/glfw_dispatch.cpp.o
+
+src/ui/glfw_dispatch.i: src/ui/glfw_dispatch.cpp.i
+
+.PHONY : src/ui/glfw_dispatch.i
+
+# target to preprocess a source file
+src/ui/glfw_dispatch.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ui/glfw_dispatch.cpp.i
+.PHONY : src/ui/glfw_dispatch.cpp.i
+
+src/ui/glfw_dispatch.s: src/ui/glfw_dispatch.cpp.s
+
+.PHONY : src/ui/glfw_dispatch.s
+
+# target to generate assembly for a file
+src/ui/glfw_dispatch.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ui/glfw_dispatch.cpp.s
+.PHONY : src/ui/glfw_dispatch.cpp.s
+
+src/ui/lodepng.o: src/ui/lodepng.cpp.o
+
+.PHONY : src/ui/lodepng.o
+
+# target to build an object file
+src/ui/lodepng.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ui/lodepng.cpp.o
+.PHONY : src/ui/lodepng.cpp.o
+
+src/ui/lodepng.i: src/ui/lodepng.cpp.i
+
+.PHONY : src/ui/lodepng.i
+
+# target to preprocess a source file
+src/ui/lodepng.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ui/lodepng.cpp.i
+.PHONY : src/ui/lodepng.cpp.i
+
+src/ui/lodepng.s: src/ui/lodepng.cpp.s
+
+.PHONY : src/ui/lodepng.s
+
+# target to generate assembly for a file
+src/ui/lodepng.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ui/lodepng.cpp.s
+.PHONY : src/ui/lodepng.cpp.s
+
+src/ui/platform_ui_adapter.o: src/ui/platform_ui_adapter.cpp.o
+
+.PHONY : src/ui/platform_ui_adapter.o
+
+# target to build an object file
+src/ui/platform_ui_adapter.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ui/platform_ui_adapter.cpp.o
+.PHONY : src/ui/platform_ui_adapter.cpp.o
+
+src/ui/platform_ui_adapter.i: src/ui/platform_ui_adapter.cpp.i
+
+.PHONY : src/ui/platform_ui_adapter.i
+
+# target to preprocess a source file
+src/ui/platform_ui_adapter.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ui/platform_ui_adapter.cpp.i
+.PHONY : src/ui/platform_ui_adapter.cpp.i
+
+src/ui/platform_ui_adapter.s: src/ui/platform_ui_adapter.cpp.s
+
+.PHONY : src/ui/platform_ui_adapter.s
+
+# target to generate assembly for a file
+src/ui/platform_ui_adapter.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ui/platform_ui_adapter.cpp.s
+.PHONY : src/ui/platform_ui_adapter.cpp.s
+
+src/ui/simulate.o: src/ui/simulate.cpp.o
+
+.PHONY : src/ui/simulate.o
+
+# target to build an object file
+src/ui/simulate.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ui/simulate.cpp.o
+.PHONY : src/ui/simulate.cpp.o
+
+src/ui/simulate.i: src/ui/simulate.cpp.i
+
+.PHONY : src/ui/simulate.i
+
+# target to preprocess a source file
+src/ui/simulate.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ui/simulate.cpp.i
+.PHONY : src/ui/simulate.cpp.i
+
+src/ui/simulate.s: src/ui/simulate.cpp.s
+
+.PHONY : src/ui/simulate.s
+
+# target to generate assembly for a file
+src/ui/simulate.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ui/simulate.cpp.s
+.PHONY : src/ui/simulate.cpp.s
 
 # Help Target
 help:
@@ -402,36 +483,45 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... main"
-	@echo "... src/controller.o"
-	@echo "... src/controller.i"
-	@echo "... src/controller.s"
-	@echo "... src/filter.o"
-	@echo "... src/filter.i"
-	@echo "... src/filter.s"
-	@echo "... src/glfw_adapter.o"
-	@echo "... src/glfw_adapter.i"
-	@echo "... src/glfw_adapter.s"
-	@echo "... src/glfw_dispatch.o"
-	@echo "... src/glfw_dispatch.i"
-	@echo "... src/glfw_dispatch.s"
-	@echo "... src/kinematics.o"
-	@echo "... src/kinematics.i"
-	@echo "... src/kinematics.s"
-	@echo "... src/lodepng.o"
-	@echo "... src/lodepng.i"
-	@echo "... src/lodepng.s"
+	@echo "... src/logging/BaseDataSaver.o"
+	@echo "... src/logging/BaseDataSaver.i"
+	@echo "... src/logging/BaseDataSaver.s"
+	@echo "... src/logging/ExtendedDataSaver.o"
+	@echo "... src/logging/ExtendedDataSaver.i"
+	@echo "... src/logging/ExtendedDataSaver.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
-	@echo "... src/platform_ui_adapter.o"
-	@echo "... src/platform_ui_adapter.i"
-	@echo "... src/platform_ui_adapter.s"
-	@echo "... src/simulate.o"
-	@echo "... src/simulate.i"
-	@echo "... src/simulate.s"
-	@echo "... src/trajectory.o"
-	@echo "... src/trajectory.i"
-	@echo "... src/trajectory.s"
+	@echo "... src/mcl_controller/controller.o"
+	@echo "... src/mcl_controller/controller.i"
+	@echo "... src/mcl_controller/controller.s"
+	@echo "... src/mcl_controller/filter.o"
+	@echo "... src/mcl_controller/filter.i"
+	@echo "... src/mcl_controller/filter.s"
+	@echo "... src/mcl_controller/kinematics.o"
+	@echo "... src/mcl_controller/kinematics.i"
+	@echo "... src/mcl_controller/kinematics.s"
+	@echo "... src/mcl_controller/trajectory.o"
+	@echo "... src/mcl_controller/trajectory.i"
+	@echo "... src/mcl_controller/trajectory.s"
+	@echo "... src/optimization/optimizer.o"
+	@echo "... src/optimization/optimizer.i"
+	@echo "... src/optimization/optimizer.s"
+	@echo "... src/ui/glfw_adapter.o"
+	@echo "... src/ui/glfw_adapter.i"
+	@echo "... src/ui/glfw_adapter.s"
+	@echo "... src/ui/glfw_dispatch.o"
+	@echo "... src/ui/glfw_dispatch.i"
+	@echo "... src/ui/glfw_dispatch.s"
+	@echo "... src/ui/lodepng.o"
+	@echo "... src/ui/lodepng.i"
+	@echo "... src/ui/lodepng.s"
+	@echo "... src/ui/platform_ui_adapter.o"
+	@echo "... src/ui/platform_ui_adapter.i"
+	@echo "... src/ui/platform_ui_adapter.s"
+	@echo "... src/ui/simulate.o"
+	@echo "... src/ui/simulate.i"
+	@echo "... src/ui/simulate.s"
 .PHONY : help
 
 
