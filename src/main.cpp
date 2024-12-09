@@ -34,6 +34,7 @@
 #include "controller.h"
 #include "kinematics.h"
 #include "filter.h"
+#include "optimizer.h"
 
 
 #define MUJOCO_PLUGIN_DIR "mujoco_plugin"
@@ -291,28 +292,18 @@ trajectory tra_FR;
 trajectory tra_RL;
 trajectory tra_RR;
 
-Vector2d disturbance;
+Optimizer opt(&state_Model_FL,&state_Model_FR,&state_Model_RL,&state_Model_RR,&TrunkModel);
 
-double Bm = 40;
-double K_spring = 5000;
+Vector2d disturbance;
 
 double vx = 0.0;
 int t ;
-double t_norm;
-double T_stand= 0.5;
-double r0  = 0.38;
-double r_td ;
-double th_td[4];
-double wd;
 
-Vector2d stance_state; 
-
-// Vector4d th_draw;
-double time_now;
 bool start =false;
 double swept_angle;
 double vx_est;
 double T_walking = 1;  // total time of walking
+
 
 
 void mycontroller(const mjModel* m,mjData *d){
@@ -372,7 +363,10 @@ void mycontroller(const mjModel* m,mjData *d){
         kin_RR.state_init(m,d, &state_Model_RR);  
       }
     }
-
+    VectorXd x0 = VectorXd::Zero(12);
+    VectorXd x_ref = VectorXd::Zero(12);
+    Matrix3d Iner = Matrix3d::Identity(3,3);
+    
     if(d->time > 1) start = 1; // after 1sec -> start
     
     if(start) // base vel
@@ -406,9 +400,7 @@ void mycontroller(const mjModel* m,mjData *d){
       //     // cout << " x vel = "<<sqrt(pow(d->sensordata[34],2)+pow(d->sensordata[35],2))<< " desired _vel = "<< vx<< endl;
       // }
       
-      stance_state[0] = vx;
-      stance_state[1] = sqrt(pow(d->sensordata[34],2)+pow(d->sensordata[35],2));
-  
+   
     }
 
   /* Trajectory Generation */
@@ -442,21 +434,22 @@ void mycontroller(const mjModel* m,mjData *d){
       tra_RR.Hold(&state_Model_RR);
     }
 
-
+  opt.MPC_SRB(x0,x_ref, Iner);
     kin_FL.sensor_measure(m, d, &state_Model_FL, &TrunkModel, leg_FL_no); // get joint sensor data & calculate biarticular angles
     kin_FR.sensor_measure(m, d, &state_Model_FR, &TrunkModel, leg_FR_no);
     kin_RL.sensor_measure(m, d, &state_Model_RL, &TrunkModel, leg_RL_no);
     kin_RR.sensor_measure(m, d, &state_Model_RR, &TrunkModel, leg_RR_no);
-    cout <<"pose = "<<  TrunkModel.posCS<<endl;
-    cout <<"base -> FL "<<  TrunkModel.pos_base2FL<<endl;
-    cout <<"base -> FR "<<  TrunkModel.pos_base2FR<<endl;
-    cout <<"base -> RL "<<  TrunkModel.pos_base2RL<<endl;
-    cout <<"base -> RR "<<  TrunkModel.pos_base2RR<<endl;
 
-    cout << "skew -> FL "<< TrunkModel.skew_base2FL <<endl;
-    cout << "skew -> FR "<< TrunkModel.skew_base2FR <<endl;
-    cout << "skew -> RL "<< TrunkModel.skew_base2RL <<endl;
-    cout << "skew -> RR "<< TrunkModel.skew_base2RR <<endl;
+    // cout <<"pose = "<<  TrunkModel.posCS<<endl;
+    // cout <<"base -> FL "<<  TrunkModel.pos_base2FL<<endl;
+    // cout <<"base -> FR "<<  TrunkModel.pos_base2FR<<endl;
+    // cout <<"base -> RL "<<  TrunkModel.pos_base2RL<<endl;
+    // cout <<"base -> RR "<<  TrunkModel.pos_base2RR<<endl;
+
+    // cout << "skew -> FL "<< TrunkModel.skew_base2FL <<endl;
+    // cout << "skew -> FR "<< TrunkModel.skew_base2FR <<endl;
+    // cout << "skew -> RL "<< TrunkModel.skew_base2RL <<endl;
+    // cout << "skew -> RR "<< TrunkModel.skew_base2RR <<endl;
     
 
     kin_FL.model_param_cal(m, d,&state_Model_FL); // calculate model parameters

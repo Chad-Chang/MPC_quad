@@ -134,6 +134,9 @@ void kinematics::model_param_cal(const mjModel* m, mjData* d, StateModel_* state
 //
 void kinematics::sensor_measure(const mjModel* m, mjData* d, StateModel_* state_model,TrunkModel_* TrunkModel,int leg_no)
 {
+
+    TrunkModel -> mass = 42.64;
+
     cut_off_cal = 1/(2*pi*100);
 
     state_model->q[0] = d->qpos[leg_no + 7];

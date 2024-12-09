@@ -30,16 +30,45 @@ private:
     // * dp_x, dp_y, dp_z,
 
     // * base coordinate 
+    double t;
+    
+    VectorXd g_; // gravity vector
+    // VectorXd xi_;
+    std::vector<VectorXd> xi_;
+    std::vector<VectorXd> ui_;
+    VectorXd x0_;
+    // VecotrXd ; 
+    Matrix3d R_toEuler_; // euler matrix
+    MatrixXd Ad_; MatrixXd A_cond_; MatrixXd Aqp_; 
+    MatrixXd Bd_; MatrixXd B_cond_; MatrixXd Bqp_; 
+    
+    MatrixXd H_; // qp form matrix1 
+    real_t* Hqp_; // qp form matrix1 
 
-    VectorXd x0_; //initial state
-    VectorXd x_ref_; // reference state
-    VectorXd gravity_; // gravity vector
+    MatrixXd G_; // qp form matrix2
+    real_t* Gqp_; // qp form matrix1 
+
+    MatrixXd L_; // weighting matrix - state
+    MatrixXd K_; // weighting matrix - input
+
+    MatrixXd P_; // constraint matrix :lb < Ax < ub
+    real_t* Pqp_; // constraint matrix :lb < Ax < ub
+    
+    int nWSR_ = 100; // interation limit
+
+    Matrix3d Inertia_;
+    
+
+    double running_time_; // MPC running time
+    
+    StateModel_* FL_ptr_; StateModel_* FR_ptr_; StateModel_* RL_ptr_; StateModel_* RR_ptr_;
+    TrunkModel_* Trunk_ptr_;  // r_i involved
 
 public:
+
     Optimizer(StateModel_* FL, StateModel_* FR, StateModel_* RL, StateModel_* RR, TrunkModel_* Base);
     ~Optimizer();
-    StateModel_* FL_ptr_; StateModel_* FR_ptr_; StateModel_* RL_ptr_; StateModel_* RR_ptr_;
-    TrunkModel_* Trunk_ptr_;
-    
+    std::vector<VectorXd> MPC_SRB(VectorXd x0, VectorXd x_ref, Matrix3d inertia);
+
 };
 #endif
