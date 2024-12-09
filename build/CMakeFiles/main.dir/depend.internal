@@ -22,6 +22,7 @@ CMakeFiles/main.dir/src/main.cpp.o
  ../includes/mcl_controller/filter.h
  ../includes/mcl_controller/kinematics.h
  ../includes/mcl_controller/trajectory.h
+ ../includes/optimization/optimizer.h
  ../includes/ui/array_safety.h
  ../includes/ui/glfw_adapter.h
  ../includes/ui/glfw_corevideo.h

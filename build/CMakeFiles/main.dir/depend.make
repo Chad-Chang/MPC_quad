@@ -21,6 +21,7 @@ CMakeFiles/main.dir/src/main.cpp.o: ../includes/mcl_controller/controller.h
 CMakeFiles/main.dir/src/main.cpp.o: ../includes/mcl_controller/filter.h
 CMakeFiles/main.dir/src/main.cpp.o: ../includes/mcl_controller/kinematics.h
 CMakeFiles/main.dir/src/main.cpp.o: ../includes/mcl_controller/trajectory.h
+CMakeFiles/main.dir/src/main.cpp.o: ../includes/optimization/optimizer.h
 CMakeFiles/main.dir/src/main.cpp.o: ../includes/ui/array_safety.h
 CMakeFiles/main.dir/src/main.cpp.o: ../includes/ui/glfw_adapter.h
 CMakeFiles/main.dir/src/main.cpp.o: ../includes/ui/glfw_corevideo.h
