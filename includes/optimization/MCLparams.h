@@ -1,0 +1,28 @@
+#ifndef MCLPARAMS_H
+#define MCLPARAMS_H
+
+#define GRF_UPDATE_FREQUENCY 2.5 // ms
+#define MAIN_UPDATE_FREQUENCY 1 // ms
+
+//MPC
+#define PLAN_HORIZON 10
+#define MPC_STATE_DIM 13
+#define MPC_CONSTRAINT_DIM 20
+
+// robot constant
+#define NUM_LEG 4
+#define NUM_DOF_PER_LEG 3
+#define DIM_GRF 12
+#define NUM_DOF 12
+
+
+#define FOOT_SWING_CLEARANCE1 0.0f
+#define FOOT_SWING_CLEARANCE2 0.4f
+
+#define FOOT_DELTA_X_LIMIT 0.1
+#define FOOT_DELTA_Y_LIMIT 0.1
+
+#define ERROR_CURVE_ALREADY_SET 184
+#define ERROR_CURVE_NOT_SET 185
+
+#endif //A1_CPP_A1PARAMS_H

@@ -81,21 +81,31 @@ extern double ctrl_input_RW_from_trunk[NUM_LEG];
 struct TrunkModel_
 {
   double mass;
-  Vector3d posCS; // cartesian coordinate w.r.t world coordinate
-  Vector3d posCS_des;
-  Vector3d velCS_des;
-  Vector3d velCS;
   
-  Vector3d pos_base2FL;// cartesian coordinate w.r.t world coordinate
-  Vector3d pos_base2FR;
-  Vector3d pos_base2RL;
-  Vector3d pos_base2RR;
+  // inertia tensor
+  Matrix3d inertia_tensor;
 
-  Matrix3d skew_base2FL; // scew symmetric 
-  Matrix3d skew_base2FR;
-  Matrix3d skew_base2RL;
-  Matrix3d skew_base2RR;
 
+  // state : state space equation
+  VectorXd body_state;
+  VectorXd body_state_ref;
+
+  Vector3d euler_angle_CS; // euler angle w.r.t CS
+  Vector3d euler_angle_CS_des;
+
+  Vector3d posCS; // position w.r.t CS
+  Vector3d posCS_des;
+
+  Vector3d angular_vel_CS; // absolute angular vel
+  Vector3d angular_vel_CS_des; // absolute angular vel des
+
+  Vector3d velCS_des; // world linear vel
+  Vector3d velCS; // world linear vel
+
+
+  Vector3d pos_base2leg_CS[4]; // FL, FR, RL, RR
+  Matrix3d skew_base2leg_CS[4]; // scew symmetric 
+  
 };
 
 struct StateModel_

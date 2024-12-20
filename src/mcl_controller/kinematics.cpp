@@ -35,7 +35,7 @@ void kinematics::state_update(StateModel_* state_model)
 };
 
 
-void kinematics::model_param_cal(const mjModel* m, mjData* d, StateModel_* state_model)
+void kinematics::model_param_cal(const mjModel* m, mjData* d, StateModel_* state_model, TrunkModel_* TrunkModel)
 {
     cut_off_cal = 1/(2*pi*150);
     // cout << state_model -> q[1] <<endl;
@@ -128,11 +128,13 @@ void kinematics::model_param_cal(const mjModel* m, mjData* d, StateModel_* state
     state_model -> corriolis_bi_torq = coriolis_bi_;
     state_model -> gravity_bi_torq = gravity_bi_;
     state_model -> off_diag_inertia_bi = off_diag_inertia_bi_;
+
+    TrunkModel -> inertia_tensor = Matrix3d::Identity();
     // diagonal inertia는 DOB의 nominal inertia
 }; // param_model parameter
 
 //
-void kinematics::sensor_measure(const mjModel* m, mjData* d, StateModel_* state_model,TrunkModel_* TrunkModel,int leg_no)
+void kinematics::sensor_measure(const mjModel* m, mjData* d, StateModel_* state_model, TrunkModel_* TrunkModel, int leg_no)
 {
 
     TrunkModel -> mass = 42.64;
@@ -156,43 +158,20 @@ void kinematics::sensor_measure(const mjModel* m, mjData* d, StateModel_* state_
     state_model -> posCS[1] = d->sensordata[leg_no+45];
     state_model -> posCS[2] = d->sensordata[leg_no+46];
 
-    TrunkModel->velCS[0] = d->sensordata[34];
-    TrunkModel->velCS[1] = d->sensordata[35];
-    TrunkModel->velCS[2] = d->sensordata[36];
+    TrunkModel->velCS[0] = d->sensordata[34]; // CoM vx
+    TrunkModel->velCS[1] = d->sensordata[35]; // CoM vy
+    TrunkModel->velCS[2] = d->sensordata[36]; // CoM vz
 
-    TrunkModel->posCS[0] = d->sensordata[37];
-    TrunkModel->posCS[1] = d->sensordata[38];
-    TrunkModel->posCS[2] = d->sensordata[39];
+    TrunkModel->posCS[0] = d->sensordata[37]; // CoM x
+    TrunkModel->posCS[1] = d->sensordata[38]; // CoM y
+    TrunkModel->posCS[2] = d->sensordata[39]; // CoM z
 
-    if(leg_no == 0)
-    {
-        TrunkModel->pos_base2FL = state_model->posCS - TrunkModel->posCS;
-        TrunkModel->skew_base2FL << 0, -TrunkModel->pos_base2FL[2], TrunkModel->pos_base2FL[1],
-                                    TrunkModel->pos_base2FL[2], 0, -TrunkModel->pos_base2FL[0],
-                                    -TrunkModel->pos_base2FL[1], TrunkModel->pos_base2FL[0], 0;
-    }
-    else if(leg_no == 3)
-    {
-        TrunkModel->pos_base2FR = state_model->posCS - TrunkModel->posCS;
-        TrunkModel->skew_base2FR << 0, -TrunkModel->pos_base2FR[2], TrunkModel->pos_base2FR[1],
-                                    TrunkModel->pos_base2FR[2], 0, -TrunkModel->pos_base2FR[0],
-                                    -TrunkModel->pos_base2FR[1], TrunkModel->pos_base2FR[0], 0;            
-    }
-        
-    else if(leg_no == 6)
-    {
-        TrunkModel->pos_base2RL = state_model->posCS - TrunkModel->posCS;
-        TrunkModel->skew_base2RL << 0, -TrunkModel->pos_base2RL[2], TrunkModel->pos_base2RL[1],
-                                    TrunkModel->pos_base2RL[2], 0, -TrunkModel->pos_base2RL[0],
-                                    -TrunkModel->pos_base2RL[1], TrunkModel->pos_base2RL[0], 0;            
-    }
-    else if(leg_no == 9)
-    {
-        TrunkModel->pos_base2RR = state_model->posCS - TrunkModel->posCS;
-        TrunkModel->skew_base2RR << 0, -TrunkModel->pos_base2RR[2], TrunkModel->pos_base2RR[1],
-                                    TrunkModel->pos_base2RR[2], 0, -TrunkModel->pos_base2RR[0],
-                                    -TrunkModel->pos_base2RR[1], TrunkModel->pos_base2RR[0], 0;            
-    }
+    // TrunkModel->body_state << 
+
+    // update leg position
+    int leg_num = leg_no/3;
+    TrunkModel->pos_base2leg_CS[leg_num] = state_model->posCS - TrunkModel->posCS;
+    TrunkModel->skew_base2leg_CS[leg_num] = Utils::skew(TrunkModel->pos_base2leg_CS[leg_num]);
     //*
 
 // angular velocity data_ real data

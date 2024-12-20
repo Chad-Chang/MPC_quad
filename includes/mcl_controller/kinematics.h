@@ -4,10 +4,23 @@
 #include "globalVariable.h"
 #include "filter.h"
 #include <mujoco/mujoco.h> //Caution Crash
-
+#include "Utils.h"
 
 class kinematics
 {
+    public:
+    kinematics(); //생성자
+    ~kinematics(); //소멸자
+    
+    void state_update(StateModel_* state_model);
+    void model_param_cal(const mjModel* m, mjData* d, StateModel_* state_model, TrunkModel_* TrunkModel);
+    void sensor_measure(const mjModel* m, mjData* d, StateModel_* state_model,TrunkModel_* TrunkModel, int leg_no);
+    void jacobianRW(StateModel_* state_model);
+    void fwdKinematics_cal(StateModel_* state_model);
+    void state_init(const mjModel* m, mjData* d, StateModel_* state_model);
+    
+    //void state_init(const mjModel* m, mjData* d, StateModel_* state_model, ParamModel_* param_model); -> subtitude param_model to kinematic Class variable
+
 
 private:   
     /* Trunk Parameter */
@@ -54,18 +67,6 @@ private:
     Vector2d H_old;
     
 
-public:
-    kinematics(); //생성자
-    ~kinematics(); //소멸자
-    
-    void state_update(StateModel_* state_model);
-    void model_param_cal(const mjModel* m, mjData* d, StateModel_* state_model);
-    void sensor_measure(const mjModel* m, mjData* d, StateModel_* state_model,TrunkModel_* TrunkModel, int leg_no);
-    void jacobianRW(StateModel_* state_model);
-    void fwdKinematics_cal(StateModel_* state_model);
-    void state_init(const mjModel* m, mjData* d, StateModel_* state_model);
-    
-    //void state_init(const mjModel* m, mjData* d, StateModel_* state_model, ParamModel_* param_model); -> subtitude param_model to kinematic Class variable
 
 };
 

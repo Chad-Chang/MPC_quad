@@ -12,6 +12,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/main.dir/src/ui/lodepng.cpp.o"
   "CMakeFiles/main.dir/src/ui/platform_ui_adapter.cpp.o"
   "CMakeFiles/main.dir/src/ui/simulate.cpp.o"
+  "CMakeFiles/main.dir/src/utils/Utils.cpp.o"
   "main"
   "main.pdb"
 )

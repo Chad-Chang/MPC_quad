@@ -272,6 +272,7 @@ StateModel_ state_Model_RL;
 StateModel_ state_Model_RR;
 TrunkModel_ TrunkModel;
 
+
 const int leg_FL_no = 0;
 const int leg_FR_no = 3;
 const int leg_RL_no = 6;
@@ -310,6 +311,8 @@ void mycontroller(const mjModel* m,mjData *d){
   
   if(d->time < 0.0000001)// settings
     {
+      TrunkModel.body_state = VectorXd::Zero(NUMOFX);
+      TrunkModel.body_state_ref = VectorXd::Zero(NUMOFX);
       for(int i = 0; i < 4; i++)
       {
       // Initialization
@@ -352,10 +355,10 @@ void mycontroller(const mjModel* m,mjData *d){
         state_Model_RR.posRW_des[0] = state_Model_RR.posRW_ref[0];
         state_Model_RR.posRW_ref[1] = pi /2;
 
-        kin_FL.model_param_cal(m, d, &state_Model_FL); // state init is before. Caution Error.
-        kin_FR.model_param_cal(m, d, &state_Model_FR);
-        kin_RL.model_param_cal(m, d, &state_Model_RL);
-        kin_RR.model_param_cal(m, d, &state_Model_RR);
+        kin_FL.model_param_cal(m, d, &state_Model_FL, &TrunkModel); // state init is before. Caution Error.
+        kin_FR.model_param_cal(m, d, &state_Model_FR, &TrunkModel);
+        kin_RL.model_param_cal(m, d, &state_Model_RL, &TrunkModel);
+        kin_RR.model_param_cal(m, d, &state_Model_RR, &TrunkModel);
         
         kin_FL.state_init(m,d, &state_Model_FL);
         kin_FR.state_init(m,d, &state_Model_FR); 
@@ -363,6 +366,7 @@ void mycontroller(const mjModel* m,mjData *d){
         kin_RR.state_init(m,d, &state_Model_RR);  
       }
     }
+
     VectorXd x0 = VectorXd::Zero(12);
     VectorXd x_ref = VectorXd::Zero(12);
     Matrix3d Iner = Matrix3d::Identity(3,3);
@@ -374,37 +378,16 @@ void mycontroller(const mjModel* m,mjData *d){
       if(1<=d->time && d->time <3 )
       {   
           vx = (0.3)/(2)*(d->time - 1);
-          // cout << " x vel = "<<sqrt(pow(d->sensordata[34],2)+pow(d->sensordata[35],2)) << " desired _vel = "<< vx<< endl;
       }
       else if(3<=d->time&& d->time<5)
       {
           vx = 0.3;
-          // cout << " x vel = "<<sqrt(pow(d->sensordata[34],2)+pow(d->sensordata[35],2))<< " desired _vel = "<< vx<< endl;
 
       }
-      // else if(3<=d->time&& d->time<7)
-      // {
-      //     vx = (1.-0.5)/(3)*(d->time - 3)+0.5;
-      //     // cout << " x vel = "<<sqrt(pow(d->sensordata[34],2)+pow(d->sensordata[35],2))<< " desired _vel = "<< vx<< endl;
-
-      // }
-      // else if(7<=d->time&& d->time<9)
-      // {
-      //     vx = 1;
-      //     // cout << " x vel = "<<sqrt(pow(d->sensordata[34],2)+pow(d->sensordata[35],2))<< " desired _vel = "<< vx<< endl;
-
-      // }
-      // else if(9 <= d->time && d->time <11 )
-      // {
-      //     vx = (1.5-1)/(2)*(d->time - 9)+1;
-      //     // cout << " x vel = "<<sqrt(pow(d->sensordata[34],2)+pow(d->sensordata[35],2))<< " desired _vel = "<< vx<< endl;
-      // }
-      
-   
     }
 
   /* Trajectory Generation */
-    int cmd_motion_type = 2;
+    int cmd_motion_type = 0;
     int mode_admitt = 1;
     vx_est = d->sensordata[34];
     
@@ -434,28 +417,20 @@ void mycontroller(const mjModel* m,mjData *d){
       tra_RR.Hold(&state_Model_RR);
     }
 
-  opt.MPC_SRB(x0,x_ref, Iner);
+    if(d->time>3)
+      VectorXd u = opt.MPC_SRB();
+    
+
+
     kin_FL.sensor_measure(m, d, &state_Model_FL, &TrunkModel, leg_FL_no); // get joint sensor data & calculate biarticular angles
     kin_FR.sensor_measure(m, d, &state_Model_FR, &TrunkModel, leg_FR_no);
     kin_RL.sensor_measure(m, d, &state_Model_RL, &TrunkModel, leg_RL_no);
-    kin_RR.sensor_measure(m, d, &state_Model_RR, &TrunkModel, leg_RR_no);
+    kin_RR.sensor_measure(m, d, &state_Model_RR, &TrunkModel, leg_RR_no);   
 
-    // cout <<"pose = "<<  TrunkModel.posCS<<endl;
-    // cout <<"base -> FL "<<  TrunkModel.pos_base2FL<<endl;
-    // cout <<"base -> FR "<<  TrunkModel.pos_base2FR<<endl;
-    // cout <<"base -> RL "<<  TrunkModel.pos_base2RL<<endl;
-    // cout <<"base -> RR "<<  TrunkModel.pos_base2RR<<endl;
-
-    // cout << "skew -> FL "<< TrunkModel.skew_base2FL <<endl;
-    // cout << "skew -> FR "<< TrunkModel.skew_base2FR <<endl;
-    // cout << "skew -> RL "<< TrunkModel.skew_base2RL <<endl;
-    // cout << "skew -> RR "<< TrunkModel.skew_base2RR <<endl;
-    
-
-    kin_FL.model_param_cal(m, d,&state_Model_FL); // calculate model parameters
-    kin_FR.model_param_cal(m, d,&state_Model_FR);
-    kin_RL.model_param_cal(m, d,&state_Model_RL);
-    kin_RR.model_param_cal(m, d,&state_Model_RR);
+    kin_FL.model_param_cal(m, d,&state_Model_FL, &TrunkModel); // calculate model parameters
+    kin_FR.model_param_cal(m, d,&state_Model_FR, &TrunkModel);
+    kin_RL.model_param_cal(m, d,&state_Model_RL, &TrunkModel);
+    kin_RR.model_param_cal(m, d,&state_Model_RR, &TrunkModel);
 
     kin_FL.jacobianRW(&state_Model_FL);
     kin_FR.jacobianRW(&state_Model_FR);
@@ -523,6 +498,23 @@ void mycontroller(const mjModel* m,mjData *d){
     d->ctrl[10] = state_Model_RR.tau_bi[0] + state_Model_RR.tau_bi[1] +disturbance[0];
     d->ctrl[11] = state_Model_RR.tau_bi[1];
     
+
+    //** 
+    // d->ctrl[0] = ;
+    // d->ctrl[1] = ;
+    // d->ctrl[2] = ;
+
+    // d->ctrl[3] = ;
+    // d->ctrl[4] = ;
+    // d->ctrl[5] = ;
+
+    // d->ctrl[6] = ;
+    // d->ctrl[7] = ;
+    // d->ctrl[8] = ;
+
+    // d->ctrl[9] = ;
+    // d->ctrl[10] = ;
+    // d->ctrl[11] = ;
     
   kin_FL.state_update(&state_Model_FL);
   kin_FR.state_update(&state_Model_FR);

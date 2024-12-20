@@ -17,6 +17,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 set (SOURCES
     src/main.cpp
     
+    src/utils/Utils.cpp
+
     src/logging/BaseDataSaver.cpp
     src/logging/ExtendedDataSaver.cpp
 
@@ -48,6 +50,7 @@ target_include_directories(main PUBLIC
     ${CMAKE_SOURCE_DIR}/includes/optimization
     ${CMAKE_SOURCE_DIR}/includes/mcl_controller
     ${CMAKE_SOURCE_DIR}/includes/ui
+    ${CMAKE_SOURCE_DIR}/includes/utils
     ${CMAKE_SOURCE_DIR}/../../include
     ${CMAKE_SOURCE_DIR}/../../include/mujoco
 )
