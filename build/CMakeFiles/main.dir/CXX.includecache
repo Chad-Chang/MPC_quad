@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/BaseDataSaver.hpp
+fstream
+-
+vector
+-
+string
+-
+iostream
+-
+
+../include/ExtendedDataSaver.hpp
+BaseDataSaver.hpp
+../include/BaseDataSaver.hpp
+Eigen/Dense
+-
+
+/home/chad/Documents/c++/qpOASES3/src/one_leg.cpp
+qpOASES.hpp
+-
+iostream
+-
+chrono
+-
+Eigen/Dense
+-
+vector
+-
+ExtendedDataSaver.hpp
+/home/chad/Documents/c++/qpOASES3/src/ExtendedDataSaver.hpp
+
