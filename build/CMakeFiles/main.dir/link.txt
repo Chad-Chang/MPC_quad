@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/main.dir/src/main.cpp.o CMakeFiles/main.dir/src/BaseDataSaver.cpp.o CMakeFiles/main.dir/src/ExtendedDataSaver.cpp.o -o main  -lqpOASES 
