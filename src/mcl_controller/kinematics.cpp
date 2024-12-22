@@ -104,8 +104,7 @@ void kinematics::model_param_cal(const mjModel* m, mjData* d, StateModel_* state
     double check[4] = { 0 };
     
     state_model->Lamda_nominal_DOB = state_model->jacbRW_trans*Inertia_DOB*state_model->jacbRW;
-    // cout << state_model->jacbRW_trans << endl;
-    // cout << state_model->Lamda_nominal_DOB <<endl;
+
     
     //Coriolis & Gravity
 
@@ -129,7 +128,34 @@ void kinematics::model_param_cal(const mjModel* m, mjData* d, StateModel_* state
     state_model -> gravity_bi_torq = gravity_bi_;
     state_model -> off_diag_inertia_bi = off_diag_inertia_bi_;
 
-    TrunkModel -> inertia_tensor = Matrix3d::Identity();
+    TrunkModel -> inertia_body = Matrix3d::Identity(); //
+
+    // rotation matrix body2world
+    int trunk_id = mj_name2id(m,mjOBJ_BODY,"trunk");
+    if (trunk_id < 0) {
+        std::cerr << "Trunk body not found!" << std::endl;
+        return;
+    }
+    int gyro_id = mj_name2id(m,mjOBJ_BODY,"imu_gyro");
+    if (gyro_id < 0) {
+        std::cerr << "IMU gyro sensor not found!" << std::endl;
+        return;
+    }
+    mjtNum* gyro_local = d->sensordata + m->sensor_adr[gyro_id];
+
+    mjtNum* m_R_wb = d->xmat + trunk_id*9;
+    TrunkModel -> R_wb << m_R_wb[0],  m_R_wb[1], m_R_wb[2],
+                        m_R_wb[3],  m_R_wb[4], m_R_wb[5],
+                        m_R_wb[6],  m_R_wb[7], m_R_wb[8];   
+    
+    TrunkModel -> euler_angle_world << TrunkModel -> R_wb.eulerAngles(2,1,0);
+    TrunkModel -> angular_vel << gyro_local[0],gyro_local[1],gyro_local[2];
+
+    TrunkModel -> body_state << TrunkModel -> euler_angle_world, 
+                                TrunkModel -> posCS, 
+                                TrunkModel -> angular_vel,
+                                TrunkModel -> velCS;
+                                
     // diagonal inertia는 DOB의 nominal inertia
 }; // param_model parameter
 

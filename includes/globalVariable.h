@@ -83,21 +83,23 @@ struct TrunkModel_
   double mass;
   
   // inertia tensor
-  Matrix3d inertia_tensor;
+  Matrix3d inertia_body;
+  Matrix3d inertia_global;
+  Matrix3d R_wb;
 
 
   // state : state space equation
   VectorXd body_state;
   VectorXd body_state_ref;
 
-  Vector3d euler_angle_CS; // euler angle w.r.t CS
-  Vector3d euler_angle_CS_des;
+  Vector3d euler_angle_world; // euler angle w.r.t CS
+  Vector3d euler_angle_world_des;
 
   Vector3d posCS; // position w.r.t CS
   Vector3d posCS_des;
 
-  Vector3d angular_vel_CS; // absolute angular vel
-  Vector3d angular_vel_CS_des; // absolute angular vel des
+  Vector3d angular_vel; // absolute angular vel
+  Vector3d angular_vel_des; // absolute angular vel des
 
   Vector3d velCS_des; // world linear vel
   Vector3d velCS; // world linear vel

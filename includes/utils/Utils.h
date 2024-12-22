@@ -14,6 +14,7 @@ public:
     static Eigen::Matrix3d skew(Eigen::Vector3d vec);
     static Eigen::Matrix3d pseudo_inverse(const Eigen::Matrix3d &mat);
     static double cal_dihedral_angle(Eigen::Vector3d surf_coef_1, Eigen::Vector3d surf_coef_2);
+    static Eigen::Vector3d rot_to_euler(Eigen::Matrix3d rotation);
 };
 
 class BezierUtils {

@@ -28,7 +28,7 @@ public:
     void reset();
     void update_state(); // parameterupdate
     void calculate_Ac();
-    void calculate_Bc(Matrix3d body2global_R); 
+    void calculate_Bc(); 
     void discretization(double dt); // euler discretization
     void solve_qp();
 
@@ -69,7 +69,7 @@ private:
     
     int nWSR_ = 100; // interation limit
 
-    Matrix3d inertia_tensor_; Matrix3d inertia_global_;
+    Matrix3d inertia_body_; Matrix3d inertia_world_;
     
     double running_time_; // MPC running time
     

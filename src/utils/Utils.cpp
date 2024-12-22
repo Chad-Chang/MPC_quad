@@ -4,6 +4,12 @@
 #include "MCLparams.h"
 #include "Utils.h"
 
+Eigen::Vector3d Utils::rot_to_euler(Eigen::Matrix3d rotation) 
+{
+    
+    return rotation.eulerAngles(2,1,0);
+}
+
 Eigen::Vector3d Utils::quat_to_euler(Eigen::Quaterniond quat) {
     Eigen::Vector3d rst;
 

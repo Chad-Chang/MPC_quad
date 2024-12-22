@@ -308,7 +308,7 @@ double T_walking = 1;  // total time of walking
 
 
 void mycontroller(const mjModel* m,mjData *d){
-  
+  d->qpos[2] =  1;
   if(d->time < 0.0000001)// settings
     {
       TrunkModel.body_state = VectorXd::Zero(NUMOFX);
@@ -319,7 +319,7 @@ void mycontroller(const mjModel* m,mjData *d){
         d->qpos[0] = 0;
         d->qpos[1] = 0;
         // d->qpos[2] =  0.3536;   // qpos[0,1,2] : trunk pos                                                                                                                 
-        d->qpos[2] =  0.5;   // qpos[0,1,2] : trunk pos                                                                                                                 
+        d->qpos[2] =  1;   // qpos[0,1,2] : trunk pos                                                                                                                 
                             // qpos[3,4,5.6] : trunk orientation quaternian
         d->qpos[3] = 0.7071;
         d->qpos[4] = -0.7071;
@@ -387,7 +387,7 @@ void mycontroller(const mjModel* m,mjData *d){
     }
 
   /* Trajectory Generation */
-    int cmd_motion_type = 0;
+    int cmd_motion_type = 2;
     int mode_admitt = 1;
     vx_est = d->sensordata[34];
     
@@ -482,21 +482,21 @@ void mycontroller(const mjModel* m,mjData *d){
     ctrl_RR.FOBRW(&state_Model_RR, 100); 
     
 //    // Torque input Biarticular
-    d->ctrl[0] = 5000*(0-d->qpos[7]); //FLHAA  
-    d->ctrl[1] = state_Model_FL.tau_bi[0] + state_Model_FL.tau_bi[1] + disturbance[0];
-    d->ctrl[2] = state_Model_FL.tau_bi[1];
+    // d->ctrl[0] = 5000*(0-d->qpos[7]); //FLHAA  
+    // d->ctrl[1] = state_Model_FL.tau_bi[0] + state_Model_FL.tau_bi[1] + disturbance[0];
+    // d->ctrl[2] = state_Model_FL.tau_bi[1];
 
-    d->ctrl[3] = 5000*(0-d->qpos[10]); //FRHAA  
-    d->ctrl[4] = state_Model_FR.tau_bi[0] + state_Model_FR.tau_bi[1] +disturbance[0];
-    d->ctrl[5] = state_Model_FR.tau_bi[1];
+    // d->ctrl[3] = 5000*(0-d->qpos[10]); //FRHAA  
+    // d->ctrl[4] = state_Model_FR.tau_bi[0] + state_Model_FR.tau_bi[1] +disturbance[0];
+    // d->ctrl[5] = state_Model_FR.tau_bi[1];
 
-    d->ctrl[6] = 5000*(0-d->qpos[13]); //RLHAA  
-    d->ctrl[7] = state_Model_RL.tau_bi[0] + state_Model_RL.tau_bi[1] +disturbance[0];
-    d->ctrl[8] = state_Model_RL.tau_bi[1];
+    // d->ctrl[6] = 5000*(0-d->qpos[13]); //RLHAA  
+    // d->ctrl[7] = state_Model_RL.tau_bi[0] + state_Model_RL.tau_bi[1] +disturbance[0];
+    // d->ctrl[8] = state_Model_RL.tau_bi[1];
 
-    d->ctrl[9] = 5000*(0-d->qpos[16]); //FLHAA  
-    d->ctrl[10] = state_Model_RR.tau_bi[0] + state_Model_RR.tau_bi[1] +disturbance[0];
-    d->ctrl[11] = state_Model_RR.tau_bi[1];
+    // d->ctrl[9] = 5000*(0-d->qpos[16]); //FLHAA  
+    // d->ctrl[10] = state_Model_RR.tau_bi[0] + state_Model_RR.tau_bi[1] +disturbance[0];
+    // d->ctrl[11] = state_Model_RR.tau_bi[1];
     
 
     //** 

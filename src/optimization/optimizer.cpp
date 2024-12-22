@@ -36,14 +36,14 @@ void Optimizer::update_state()
     // get state update
     state_ = Trunk_ptr_->body_state;
     state_ref_ = Trunk_ptr_->body_state_ref;
-    inertia_tensor_ = Trunk_ptr_->inertia_tensor;
+    inertia_body_ = Trunk_ptr_->inertia_body;
 }
 
 VectorXd Optimizer::MPC_SRB()
 {
     Optimizer::update_state();
     Optimizer::calculate_Ac();
-    Optimizer::calculate_Bc(Matrix3d::Identity());
+    Optimizer::calculate_Bc();
     Optimizer::discretization(0.001);
     Optimizer::solve_qp();
     return ctrl_input_;
@@ -81,13 +81,14 @@ void Optimizer::calculate_Ac() // checked
     Ac_(11, 12) = 1; 
 }
 
-void Optimizer::calculate_Bc(Matrix3d body2global_R)
+void Optimizer::calculate_Bc()
 {
-    inertia_global_ = body2global_R*inertia_tensor_*body2global_R.transpose();
+    Matrix3d body2world_R = Trunk_ptr_ -> R_wb; // rotation matrix body2world
+    inertia_world_ = body2world_R * inertia_world_ * body2world_R.transpose();
     for(int i = 0 ; i< NUMOFLEG; ++i)
     {
         // FL, FR, RL, RR 
-        Bc_.block<3,3>(6, 3*i) = inertia_global_.inverse() * Trunk_ptr_ -> skew_base2leg_CS[i];
+        Bc_.block<3,3>(6, 3*i) = inertia_world_.inverse() * Trunk_ptr_ -> skew_base2leg_CS[i];
         Bc_.block<3,3>(9, 3*i) = Matrix3d::Identity()/robot_mass_;
     }
 }
@@ -195,7 +196,7 @@ void Optimizer::solve_qp()
     
     for(int i = 0 ; i< NUMOFU ; i++)
     {
-        std::cout << "Optimal solution: u"<< i << " = " << UOpt[i]<< std::endl;
+        // std::cout << "Optimal solution: u"<< i << " = " << UOpt[i]<< std::endl;
         ctrl_input_[i] = UOpt[i];
     }
     // state_ = Aqp_ * state_ + Bqp_ * ctrl_input_;
