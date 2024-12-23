@@ -69,6 +69,19 @@ void trajectory::Hold(StateModel_* state_model)
     state_model->posRW_ref[1] = pi /2;
 };
 
+void trajectory::Hold_SRB(StateModel_* state_model, TrunkModel_* TrunkModel)
+{
+    state_model->posRW_ref[0] = 0.3536;
+    state_model->posRW_ref[1] = pi /2;
+    TrunkModel-> body_state_ref << 0,0,0,
+                                    0,0,0,
+                                    0,0,0,
+                                    0,0,0,
+                                    -9.81;
+
+};
+
+
 
 //this cubic function is wered -> besie curve is needed or fifth polynomials
 Vector2d trajectory::cubic_trajectory(double T_f, double T_curr, Vector2d P0, Vector2d Pf)
@@ -80,7 +93,6 @@ Vector2d trajectory::cubic_trajectory(double T_f, double T_curr, Vector2d P0, Ve
     {
         St[0] = (-2*x1+dx0+2*x0 +dx1)*pow(t,3) + (3*x1-dx1-3*x0 - 2*dx0)*pow(t,2) + dx0 *t + x0;
         St[1] = 3*(-2*x1+dx0+2*x0 +dx1)*pow(t,2) + 2*(3*x1-dx1-3*x0 - 2*dx0)*pow(t,1) + dx0;
-        // cout << St[0] << "cutt = "<< T_curr<< " " << T_f <<endl;
         return St;
     }
     else

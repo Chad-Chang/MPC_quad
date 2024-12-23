@@ -306,20 +306,20 @@ double vx_est;
 double T_walking = 1;  // total time of walking
 
 
-
 void mycontroller(const mjModel* m,mjData *d){
-  d->qpos[2] =  1;
+  // d->qpos[2] =  1;
   if(d->time < 0.0000001)// settings
     {
       TrunkModel.body_state = VectorXd::Zero(NUMOFX);
       TrunkModel.body_state_ref = VectorXd::Zero(NUMOFX);
+      TrunkModel.body_state_ref[12] = -9.81;
       for(int i = 0; i < 4; i++)
       {
       // Initialization
         d->qpos[0] = 0;
         d->qpos[1] = 0;
         // d->qpos[2] =  0.3536;   // qpos[0,1,2] : trunk pos                                                                                                                 
-        d->qpos[2] =  1;   // qpos[0,1,2] : trunk pos                                                                                                                 
+        d->qpos[2] =  0.5;   // qpos[0,1,2] : trunk pos                                                                                                                 
                             // qpos[3,4,5.6] : trunk orientation quaternian
         d->qpos[3] = 0.7071;
         d->qpos[4] = -0.7071;
@@ -360,16 +360,12 @@ void mycontroller(const mjModel* m,mjData *d){
         kin_RL.model_param_cal(m, d, &state_Model_RL, &TrunkModel);
         kin_RR.model_param_cal(m, d, &state_Model_RR, &TrunkModel);
         
-        kin_FL.state_init(m,d, &state_Model_FL);
-        kin_FR.state_init(m,d, &state_Model_FR); 
-        kin_RL.state_init(m,d, &state_Model_RL); 
-        kin_RR.state_init(m,d, &state_Model_RR);  
+        kin_FL.state_init(m,d, &state_Model_FL, &TrunkModel);
+        kin_FR.state_init(m,d, &state_Model_FR, &TrunkModel); 
+        kin_RL.state_init(m,d, &state_Model_RL, &TrunkModel); 
+        kin_RR.state_init(m,d, &state_Model_RR, &TrunkModel);  
       }
     }
-
-    VectorXd x0 = VectorXd::Zero(12);
-    VectorXd x_ref = VectorXd::Zero(12);
-    Matrix3d Iner = Matrix3d::Identity(3,3);
     
     if(d->time > 1) start = 1; // after 1sec -> start
     
@@ -386,7 +382,7 @@ void mycontroller(const mjModel* m,mjData *d){
       }
     }
 
-  /* Trajectory Generation */
+   //* trajectory generation
     int cmd_motion_type = 2;
     int mode_admitt = 1;
     vx_est = d->sensordata[34];
@@ -411,22 +407,29 @@ void mycontroller(const mjModel* m,mjData *d){
     }
     else
     {  
-      tra_FL.Hold(&state_Model_FL);  // Hold stance
-      tra_FR.Hold(&state_Model_FR);
-      tra_RL.Hold(&state_Model_RL);
-      tra_RR.Hold(&state_Model_RR);
+      tra_FL.Hold_SRB(&state_Model_FL, &TrunkModel);  // Hold stance
+      tra_FR.Hold_SRB(&state_Model_FR, &TrunkModel);
+      tra_RL.Hold_SRB(&state_Model_RL, &TrunkModel);
+      tra_RR.Hold_SRB(&state_Model_RR, &TrunkModel);
     }
 
-    if(d->time>3)
-      VectorXd u = opt.MPC_SRB();
+    if(d->time>0.5)
+      {
+        TrunkModel.GRF = opt.MPC_SRB();
+        //* GRF check
+        // cout <<"FL = "<<  TrunkModel.GRF[0]<< "  " <<TrunkModel.GRF[1]<< "  " <<  TrunkModel.GRF[2] << endl;
+        // cout <<"FR = "<<  TrunkModel.GRF[3]<< "  " <<TrunkModel.GRF[4]<< "  " <<  TrunkModel.GRF[5] << endl;
+        // cout <<"RL = "<<  TrunkModel.GRF[6]<< "  " <<TrunkModel.GRF[7]<< "  " <<  TrunkModel.GRF[8] << endl;
+        // cout <<"RR = "<<  TrunkModel.GRF[9]<< "  " <<TrunkModel.GRF[10]<< "  " <<  TrunkModel.GRF[11] << endl;
+      }
     
-
-
+    //* update sensor
     kin_FL.sensor_measure(m, d, &state_Model_FL, &TrunkModel, leg_FL_no); // get joint sensor data & calculate biarticular angles
     kin_FR.sensor_measure(m, d, &state_Model_FR, &TrunkModel, leg_FR_no);
     kin_RL.sensor_measure(m, d, &state_Model_RL, &TrunkModel, leg_RL_no);
     kin_RR.sensor_measure(m, d, &state_Model_RR, &TrunkModel, leg_RR_no);   
 
+    //* model parameter: ..
     kin_FL.model_param_cal(m, d,&state_Model_FL, &TrunkModel); // calculate model parameters
     kin_FR.model_param_cal(m, d,&state_Model_FR, &TrunkModel);
     kin_RL.model_param_cal(m, d,&state_Model_RL, &TrunkModel);
@@ -481,40 +484,45 @@ void mycontroller(const mjModel* m,mjData *d){
     ctrl_RL.FOBRW(&state_Model_RL, 100); 
     ctrl_RR.FOBRW(&state_Model_RR, 100); 
     
+
+
+    if(d->time<=3)
+    {
 //    // Torque input Biarticular
-    // d->ctrl[0] = 5000*(0-d->qpos[7]); //FLHAA  
-    // d->ctrl[1] = state_Model_FL.tau_bi[0] + state_Model_FL.tau_bi[1] + disturbance[0];
-    // d->ctrl[2] = state_Model_FL.tau_bi[1];
+      d->ctrl[0] = 5000*(0-d->qpos[7]); //FLHAA  
+      d->ctrl[1] = state_Model_FL.tau_bi[0] + state_Model_FL.tau_bi[1] + disturbance[0];
+      d->ctrl[2] = state_Model_FL.tau_bi[1];
 
-    // d->ctrl[3] = 5000*(0-d->qpos[10]); //FRHAA  
-    // d->ctrl[4] = state_Model_FR.tau_bi[0] + state_Model_FR.tau_bi[1] +disturbance[0];
-    // d->ctrl[5] = state_Model_FR.tau_bi[1];
+      d->ctrl[3] = 5000*(0-d->qpos[10]); //FRHAA  
+      d->ctrl[4] = state_Model_FR.tau_bi[0] + state_Model_FR.tau_bi[1] +disturbance[0];
+      d->ctrl[5] = state_Model_FR.tau_bi[1];
 
-    // d->ctrl[6] = 5000*(0-d->qpos[13]); //RLHAA  
-    // d->ctrl[7] = state_Model_RL.tau_bi[0] + state_Model_RL.tau_bi[1] +disturbance[0];
-    // d->ctrl[8] = state_Model_RL.tau_bi[1];
+      d->ctrl[6] = 5000*(0-d->qpos[13]); //RLHAA  
+      d->ctrl[7] = state_Model_RL.tau_bi[0] + state_Model_RL.tau_bi[1] +disturbance[0];
+      d->ctrl[8] = state_Model_RL.tau_bi[1];
 
-    // d->ctrl[9] = 5000*(0-d->qpos[16]); //FLHAA  
-    // d->ctrl[10] = state_Model_RR.tau_bi[0] + state_Model_RR.tau_bi[1] +disturbance[0];
-    // d->ctrl[11] = state_Model_RR.tau_bi[1];
-    
+      d->ctrl[9] = 5000*(0-d->qpos[16]); //FLHAA  
+      d->ctrl[10] = state_Model_RR.tau_bi[0] + state_Model_RR.tau_bi[1] +disturbance[0];
+      d->ctrl[11] = state_Model_RR.tau_bi[1];
+    }
+    else
+    {
+      // d->ctrl[0] = ; //FLHAA  
+      // d->ctrl[1] = ;
+      // d->ctrl[2] = ;
 
-    //** 
-    // d->ctrl[0] = ;
-    // d->ctrl[1] = ;
-    // d->ctrl[2] = ;
+      // d->ctrl[3] = ;  //FRHAA 
+      // d->ctrl[4] = ;
+      // d->ctrl[5] = ;
 
-    // d->ctrl[3] = ;
-    // d->ctrl[4] = ;
-    // d->ctrl[5] = ;
+      // d->ctrl[6] = ; //FRHAA  
+      // d->ctrl[7] = ;
+      // d->ctrl[8] = ;
 
-    // d->ctrl[6] = ;
-    // d->ctrl[7] = ;
-    // d->ctrl[8] = ;
-
-    // d->ctrl[9] = ;
-    // d->ctrl[10] = ;
-    // d->ctrl[11] = ;
+      // d->ctrl[9] = ; //FRHAA  
+      // d->ctrl[10] = ;
+      // d->ctrl[11] = ;
+    }
     
   kin_FL.state_update(&state_Model_FL);
   kin_FR.state_update(&state_Model_FR);
@@ -667,7 +675,6 @@ void PhysicsLoop(mj::Simulate& sim) {
             while (Seconds((d->time - syncSim)*slowdown) < mj::Simulate::Clock::now() - syncCPU &&
                    mj::Simulate::Clock::now() - startCPU < Seconds(refreshTime)) {
               // measure slowdown before first step
-              // cout << d->time<<endl;
               if (!measured && elapsedSim) {
                 sim.measured_slowdown =
                     std::chrono::duration<double>(elapsedCPU).count() / elapsedSim;

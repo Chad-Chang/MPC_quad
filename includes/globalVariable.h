@@ -20,7 +20,8 @@ using namespace std;
 #define NDOF_TRUNK 3 // #(DoF) of trunk
 #define NDOF_LEG 2   // #(DoF) of leg
 #define NUM_LEG 4
-
+#define NUMOFX 13 
+#define NUMOFU 12
 const double Ts = 0.001; // sampling period
 const double g = 9.81;    // gravitational accel.
 const double pi = 3.141592;
@@ -78,15 +79,19 @@ extern double error_vel_trunk_old[NDOF_TRUNK];
 
 extern double ctrl_input_RW_from_trunk[NUM_LEG];
 
+
+
 struct TrunkModel_
 {
   double mass;
-  
-  // inertia tensor
-  Matrix3d inertia_body;
-  Matrix3d inertia_global;
-  Matrix3d R_wb;
 
+  //ground reaction force
+  VectorXd GRF; // FL, FR, RL, RR
+
+  // inertia tensor
+  Matrix3d inertia_b;
+  Matrix3d inertia_w;
+  Matrix3d R_wb;
 
   // state : state space equation
   VectorXd body_state;

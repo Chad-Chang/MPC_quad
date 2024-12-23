@@ -38,7 +38,6 @@ void kinematics::state_update(StateModel_* state_model)
 void kinematics::model_param_cal(const mjModel* m, mjData* d, StateModel_* state_model, TrunkModel_* TrunkModel)
 {
     cut_off_cal = 1/(2*pi*150);
-    // cout << state_model -> q[1] <<endl;
     /* Trunk Parameters */
     m_hip = 2.5;
     m_trunk_front = 10.;
@@ -119,16 +118,14 @@ void kinematics::model_param_cal(const mjModel* m, mjData* d, StateModel_* state
     gravity_bi_[0] = g * (m_thigh * d_thigh + m_shank * L) * cos(state_model->q_bi[0]);
     gravity_bi_[1] = g * m_shank * d_shank * cos(state_model->q_bi[2]);
 
-    off_diag_inertia_bi_(0,0)= 0;
-    off_diag_inertia_bi_(0,1)= m_shank*d_shank*L*cos(state_model->q[2]);
-    off_diag_inertia_bi_(1,0)= off_diag_inertia_bi_(0,1);
-    off_diag_inertia_bi_(1,1)= 0;
+    off_diag_inertia_bi_(0,0) = 0;
+    off_diag_inertia_bi_(0,1) = m_shank*d_shank*L*cos(state_model->q[2]);
+    off_diag_inertia_bi_(1,0) = off_diag_inertia_bi_(0,1);
+    off_diag_inertia_bi_(1,1) = 0;
     
     state_model -> corriolis_bi_torq = coriolis_bi_;
     state_model -> gravity_bi_torq = gravity_bi_;
     state_model -> off_diag_inertia_bi = off_diag_inertia_bi_;
-
-    TrunkModel -> inertia_body = Matrix3d::Identity(); //
 
     // rotation matrix body2world
     int trunk_id = mj_name2id(m,mjOBJ_BODY,"trunk");
@@ -136,7 +133,7 @@ void kinematics::model_param_cal(const mjModel* m, mjData* d, StateModel_* state
         std::cerr << "Trunk body not found!" << std::endl;
         return;
     }
-    int gyro_id = mj_name2id(m,mjOBJ_BODY,"imu_gyro");
+    int gyro_id = mj_name2id(m,mjOBJ_SENSOR,"imu_gyro");
     if (gyro_id < 0) {
         std::cerr << "IMU gyro sensor not found!" << std::endl;
         return;
@@ -154,8 +151,13 @@ void kinematics::model_param_cal(const mjModel* m, mjData* d, StateModel_* state
     TrunkModel -> body_state << TrunkModel -> euler_angle_world, 
                                 TrunkModel -> posCS, 
                                 TrunkModel -> angular_vel,
-                                TrunkModel -> velCS;
-                                
+                                TrunkModel -> velCS,
+                                -9.81;
+
+    TrunkModel -> inertia_b << m->body_inertia[trunk_id * 3 + 0], 0, 0,
+                                0, m->body_inertia[trunk_id * 3 + 1], 0,
+                                0, 0, m->body_inertia[trunk_id * 3 + 2];
+
     // diagonal inertia는 DOB의 nominal inertia
 }; // param_model parameter
 
@@ -241,7 +243,7 @@ void kinematics::fwdKinematics_cal(StateModel_* state_model)
     
 };
 
-void kinematics::state_init(const mjModel* m, mjData* d, StateModel_* state_model)
+void kinematics::state_init(const mjModel* m, mjData* d, StateModel_* state_model, TrunkModel_* TrunkModel)
 {
     state_model->q[0] = d->qpos[1];
     state_model->q[1] = d->qpos[2];
@@ -301,6 +303,9 @@ void kinematics::state_init(const mjModel* m, mjData* d, StateModel_* state_mode
         // Mg Trajectory
         state_model->tau_ff[i]=0.;
     }
+
+    TrunkModel -> body_state = VectorXd::Zero(NUMOFX);
+    TrunkModel -> GRF = VectorXd::Zero(NUMOFU);
     // printf("%f, %f \n", state_model->q_bi_old[0], state_model->q_bi_old[1]);
 };
 

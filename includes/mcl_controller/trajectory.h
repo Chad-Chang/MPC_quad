@@ -6,6 +6,16 @@
 using namespace std;
 class trajectory
 {
+    public:
+        trajectory();
+        ~trajectory();
+        void Squat(double t,StateModel_* state_model);
+        void Jumping(double t, StateModel_* state_model, int mode_admitt);
+        void Hold(StateModel_* state_model);
+        void Hold_SRB(StateModel_* state_model, TrunkModel_* TrunkModel);
+        void Walking(double T_walk, double t, StateModel_* state_model,double vx, double vx_est, int leg_num);
+        Vector2d cubic_trajectory(double T_f, double T_curr, Vector2d P0, Vector2d Pf);
+
     private:
         double squat_T_pause;
         double freq_squat;
@@ -45,15 +55,6 @@ class trajectory
         Vector2d pos_trunk_des;
 
 
-
-    public:
-        trajectory();
-        ~trajectory();
-        void Squat(double t,StateModel_* state_model);
-        void Jumping(double t, StateModel_* state_model, int mode_admitt);
-        void Hold(StateModel_* state_model);
-        void Walking(double T_walk, double t, StateModel_* state_model,double vx, double vx_est, int leg_num);
-        Vector2d cubic_trajectory(double T_f, double T_curr, Vector2d P0, Vector2d Pf);
 
 };
 

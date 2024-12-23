@@ -17,7 +17,7 @@ class kinematics
     void sensor_measure(const mjModel* m, mjData* d, StateModel_* state_model,TrunkModel_* TrunkModel, int leg_no);
     void jacobianRW(StateModel_* state_model);
     void fwdKinematics_cal(StateModel_* state_model);
-    void state_init(const mjModel* m, mjData* d, StateModel_* state_model);
+    void state_init(const mjModel* m, mjData* d, StateModel_* state_model, TrunkModel_* TrunkModel);
     
     //void state_init(const mjModel* m, mjData* d, StateModel_* state_model, ParamModel_* param_model); -> subtitude param_model to kinematic Class variable
 

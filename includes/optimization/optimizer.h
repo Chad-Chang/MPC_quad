@@ -67,7 +67,7 @@ private:
     MatrixXd constraint_; // constraint matrix :lb < Ax < ub
     real_t* constraint_qp_; // constraint matrix :lb < Ax < ub
     
-    int nWSR_ = 100; // interation limit
+    int nWSR_ = 1000; // interation limit
 
     Matrix3d inertia_body_; Matrix3d inertia_world_;
     
@@ -79,7 +79,7 @@ private:
 
     // * trunk model pointer 
     TrunkModel_* Trunk_ptr_;  // state , state_ref, base2leg contains
-
+    // QP 솔버 초기화
 
 };
 #endif

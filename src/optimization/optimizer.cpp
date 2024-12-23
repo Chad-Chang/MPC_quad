@@ -12,23 +12,23 @@ Optimizer::Optimizer(StateModel_* FL, StateModel_* FR, StateModel_* RL, StateMod
     Bc_ = MatrixXd::Zero(NUMOFX, NUMOFU);
     Bd_ = MatrixXd::Zero(NUMOFX, NUMOFU); Bqp_ = MatrixXd::Zero(NUMOFX, NUMOFU); 
     
-    
-    Q_ = MatrixXd::Identity(NUMOFX*HORIZON_T,NUMOFX*HORIZON_T);
-    R_ = MatrixXd::Identity(NUMOFU*HORIZON_T,NUMOFU*HORIZON_T);
-    constraint_ = MatrixXd::Zero(4*NUMOFLEG,3*NUMOFLEG);
-    mu_ = 0.6;
-    robot_mass_ = 42.64;
+    gradient_.setZero();
+    hessian_.setZero();
 
+    Q_ = MatrixXd::Identity(NUMOFX*HORIZON_T,NUMOFX*HORIZON_T)*10000;
+    R_ = MatrixXd::Identity(NUMOFU*HORIZON_T,NUMOFU*HORIZON_T)*0.0001;
+    constraint_ = MatrixXd::Zero(4*NUMOFLEG, 3*NUMOFLEG);
+    robot_mass_ = 42.64;
+    
     state_ = VectorXd::Zero(NUMOFX);
     state_ref_ = VectorXd::Zero(NUMOFX);
     // state_ref_ = Trunk_ptr_ -> body_state_ref;
     ctrl_input_ = VectorXd::Zero(NUMOFU);
-    
 };
 
 Optimizer::~Optimizer()
 {
-
+    // qp_ = new QProblem(NUMOFU*HORIZON_T,0);
 };
 
 void Optimizer::update_state()
@@ -36,11 +36,12 @@ void Optimizer::update_state()
     // get state update
     state_ = Trunk_ptr_->body_state;
     state_ref_ = Trunk_ptr_->body_state_ref;
-    inertia_body_ = Trunk_ptr_->inertia_body;
+    inertia_body_ = Trunk_ptr_->inertia_b;
 }
 
 VectorXd Optimizer::MPC_SRB()
 {
+
     Optimizer::update_state();
     Optimizer::calculate_Ac();
     Optimizer::calculate_Bc();
@@ -84,12 +85,14 @@ void Optimizer::calculate_Ac() // checked
 void Optimizer::calculate_Bc()
 {
     Matrix3d body2world_R = Trunk_ptr_ -> R_wb; // rotation matrix body2world
-    inertia_world_ = body2world_R * inertia_world_ * body2world_R.transpose();
+    inertia_world_ = body2world_R * inertia_body_ * body2world_R.transpose();
+    Trunk_ptr_->inertia_w = inertia_world_;
+
     for(int i = 0 ; i< NUMOFLEG; ++i)
     {
         // FL, FR, RL, RR 
         Bc_.block<3,3>(6, 3*i) = inertia_world_.inverse() * Trunk_ptr_ -> skew_base2leg_CS[i];
-        Bc_.block<3,3>(9, 3*i) = Matrix3d::Identity()/robot_mass_;
+        Bc_.block<3,3>(9, 3*i) = Matrix3d::Identity() / robot_mass_;
     }
 }
 
@@ -113,7 +116,6 @@ void Optimizer::solve_qp()
     // q: gradient
     // Ac: linear constraints
 
-
     // A_qp = [A,
     //         A^2,
     //         A^3,
@@ -125,6 +127,12 @@ void Optimizer::solve_qp()
     //         A^2*B(0),     A*B(1),       B(2),
     //         ...
     //         A^(k-1)*B(0), A^(k-2)*B(1), A^(k-3)*B(2), ... B(k-1)]
+
+    QProblem qp(NUMOFU * HORIZON_T, 0);
+    qp.reset();
+    Options options;
+    options.epsIterRef = 1e-8;
+    qp.setOptions(options);
 
     // keep A_qp as a storage list 
     for (int i = 0; i < HORIZON_T; ++i) {
@@ -146,10 +154,10 @@ void Optimizer::solve_qp()
             }
         }
     }
-
-    hessian_ = (Bqp_.transpose()*Q_*Bqp_ + R_);
     
-    gradient_ = Bqp_.transpose()*Q_*(Aqp_*state_-state_ref_);
+    hessian_ = 2*(Bd_.transpose() * Q_ * Bd_ + R_);
+    
+    gradient_ = 2*Bd_.transpose() * Q_ * (Ad_ * state_ - state_ref_);
 
     real_t* hessian_qp= hessian_.data();
     real_t* gradient_qp = gradient_.data();
@@ -183,20 +191,17 @@ void Optimizer::solve_qp()
                         INFINITY, 0, INFINITY, 0,
                         INFINITY, 0, INFINITY, 0,
                         INFINITY, 0, INFINITY, 0};
-    real_t UOpt[NUMOFX*HORIZON_T];
-
-    // QP 솔버 초기화
-    QProblem qp(NUMOFU*HORIZON_T, 4*NUMOFLEG); // dim(u), 
-    Options options;
-    qp.setOptions(options);
+    real_t UOpt[NUMOFU*HORIZON_T];
 
     qp.init(hessian_qp, gradient_qp, constraint_qp, lb, ub, lbA, ubA, nWSR_);
+    
+    // qp.init(hessian_qp, gradient_qp, nullptr, nullptr, nullptr, nullptr, nullptr, nWSR_);
     qp.getPrimalSolution(UOpt);
 
     
     for(int i = 0 ; i< NUMOFU ; i++)
     {
-        // std::cout << "Optimal solution: u"<< i << " = " << UOpt[i]<< std::endl;
+        std::cout << "Optimal solution: u"<< i << " = " << UOpt[i]<< std::endl;
         ctrl_input_[i] = UOpt[i];
     }
     // state_ = Aqp_ * state_ + Bqp_ * ctrl_input_;
